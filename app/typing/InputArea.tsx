@@ -9,7 +9,6 @@ const fullText = `안녕하세요, 여기는 타이핑 연습하는 서비스를
 export default function InputArea() {
   const [userInput, setUserInput] = useState("");
   const [startTime, setStartTime] = useState<number | null>(null);
-  const [endTime, setEndTime] = useState<number | null>(null); // ✅ 추가
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -48,10 +47,22 @@ export default function InputArea() {
       const wpm = Math.round((wordCount / durationSec) * 60);
       const typoCount = fullText.length - correctChars;
 
+      const accuracyTimeline = fullText
+        .split("")
+        .map((char, i) =>
+          value[i] === undefined ? null : value[i] === char ? 1 : 0
+        );
+
       // ✅ 결과를 localStorage에 저장
       localStorage.setItem(
         "typingResult",
-        JSON.stringify({ durationSec, wpm, accuracy, typoCount })
+        JSON.stringify({
+          durationSec,
+          wpm,
+          accuracy,
+          typoCount,
+          accuracyTimeline,
+        })
       );
 
       router.push("/result");

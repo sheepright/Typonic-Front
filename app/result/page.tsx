@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Chart from "./Chart";
 
 interface Result {
   durationSec: number;
   wpm: number;
   accuracy: number;
   typoCount: number;
+  accuracyTimeline: (number | null)[];
 }
 
 export default function ResultPage() {
@@ -17,7 +19,7 @@ export default function ResultPage() {
   useEffect(() => {
     const data = localStorage.getItem("typingResult");
     if (!data) {
-      router.replace("/"); // ❌ 없으면 메인으로 리다이렉트
+      router.replace("/");
       return;
     }
 
@@ -39,6 +41,7 @@ export default function ResultPage() {
         <p>🔤 WPM: {result.wpm}</p>
         <p>🎯 정확도: {result.accuracy}%</p>
         <p>❌ 오타 수: {result.typoCount}</p>
+        <Chart timeline={result.accuracyTimeline} />
       </div>
     </div>
   );
