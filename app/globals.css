@@ -1,26 +1,105 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  /* 기본 배경/글자 색 */
+  --background: #323437;
+  --foreground: #FFFFFF;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* 컬러 팔레트 */
+  --color-cdark: #2C2E31;
+  --color-cred: #FF5F56;
+  --color-corange: #FFBD2E;
+  --color-cgreen: #27C93F;
+  --color-cblue: #739BD7;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* 폰트 */
+  --font-salad: 'EF_cucumbersalad';
+  --font-corn: 'Ownglyph_corncorn-Rg';
+  --font-dung: 'DungGeunMo';
+  --font-d2: 'D2Coding';
+  --font-paper: 'Paperlogy-8ExtraBold';
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* 폰트 정의 */
+@font-face {
+  font-family: 'EF_cucumbersalad';
+  src: url('/fonts/EF_cucumbersalad.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Ownglyph_corncorn-Rg';
+  src: url('/fonts/Ownglyph_corncorn-Rg.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'DungGeunMo';
+  src: url('/fonts/DungGeunMo.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'D2Coding';
+  src: url('/fonts/D2Coding.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Paperlogy-8ExtraBold';
+  src: url('/fonts/Paperlogy-8ExtraBold.woff2') format('woff2');
+  font-weight: 800;
+  font-style: normal;
+}
+
+/* 폰트 클래스 */
+.font-salad {
+  font-family: var(--font-salad);
+}
+
+.font-corn {
+  font-family: var(--font-corn);
+}
+
+.font-dung {
+  font-family: var(--font-dung);
+}
+
+.font-d2 {
+  font-family: var(--font-d2);
+}
+
+.font-paper {
+  font-family: var(--font-paper);
+}
+
+/* 컬러 유틸 클래스 예시 (선택적으로 사용 가능) */
+.bg-cred {
+  background-color: var(--color-cred);
+}
+
+.bg-corange {
+  background-color: var(--color-corange);
+}
+
+.bg-cgreen {
+  background-color: var(--color-cgreen);
+}
+
+.bg-cblue {
+  background-color: var(--color-cblue);
+}
+
+.bg-cdark {
+  background-color: var(--color-cdark);
 }

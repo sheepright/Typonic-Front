@@ -1,9 +1,11 @@
-import InputArea from "./typing/InputArea";
+"use client";
+
+import Main from "./pages/Main";
 
 export default function Home() {
   return (
-    <main className="flex flex-col items-center justify-center h-screen p-4">
-      <InputArea />
-    </main>
+    <div>
+      <Main />
+    </div>
   );
 }
