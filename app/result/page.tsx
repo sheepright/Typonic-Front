@@ -1,5 +1,6 @@
 "use client";
 
+// 초기 세팅 저장
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
