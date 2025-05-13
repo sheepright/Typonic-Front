@@ -4,14 +4,18 @@ import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import TypingArea from "./TypingArea";
 
-const fullText = `안녕하세요, 여기는 타이핑 연습하는 서비스를 제공하는 웹 사이트입니다.`;
+const fullText = `#include <studio.h>
+int main() {
+\tprintf("Hello, Typonic!\\n");
+\treturn 0;
+}`;
 
 export default function InputArea() {
   const [userInput, setUserInput] = useState("");
   const [startTime, setStartTime] = useState<number | null>(null);
-  const [endTime, setEndTime] = useState<number | null>(null); // ✅ 추가
+  const [endTime, setEndTime] = useState<number | null>(null);
   const router = useRouter();
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null); // ✅ textarea로 변경
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -21,7 +25,7 @@ export default function InputArea() {
     inputRef.current?.focus();
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
 
     if (value.length === 1 && !startTime) setStartTime(Date.now());
@@ -48,7 +52,6 @@ export default function InputArea() {
       const wpm = Math.round((wordCount / durationSec) * 60);
       const typoCount = fullText.length - correctChars;
 
-      // ✅ 결과를 localStorage에 저장
       localStorage.setItem(
         "typingResult",
         JSON.stringify({ durationSec, wpm, accuracy, typoCount })
@@ -58,17 +61,37 @@ export default function InputArea() {
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Tab") {
+      e.preventDefault();
+      const textarea = inputRef.current;
+      if (!textarea) return;
+
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+
+      const newValue =
+        userInput.substring(0, start) + "\t" + userInput.substring(end);
+      setUserInput(newValue);
+
+      // 커서 위치 갱신
+      setTimeout(() => {
+        textarea.selectionStart = textarea.selectionEnd = start + 1;
+      }, 0);
+    }
+  };
+
   return (
-    <div
-      className="relative w-full max-w-4xl cursor-text"
-      onClick={handleClick}
-    >
+    <div className="relative w-full h-full cursor-text" onClick={handleClick}>
       <TypingArea fullText={fullText} userInput={userInput} />
-      <input
+
+      {/* textarea 입력창 */}
+      <textarea
         ref={inputRef}
         value={userInput}
         onChange={handleChange}
-        className="absolute top-0 left-0 w-full h-full opacity-0"
+        onKeyDown={handleKeyDown} // ✅ 탭 키 입력 처리
+        className="absolute top-0 left-0 w-full h-full opacity-0 resize-none"
         autoFocus
       />
     </div>
