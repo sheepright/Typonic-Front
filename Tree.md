@@ -15,7 +15,7 @@ monkeytype/
 
 components/
 ├── Typing/
-│ ├── WordDisplay.tsx # 타자할 단어 표시
+│ ├── TypingArea.tsx # 타자할 단어 표시
 │ ├── InputArea.tsx # 실제 입력 필드
 │ ├── Timer.tsx # 시간 표시기
 │ └── TypingStats.tsx # 실시간 통계 (WPM, Accuracy)
