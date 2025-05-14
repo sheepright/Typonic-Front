@@ -25,6 +25,7 @@ export default function InputArea({ setGage }: InputAreaProps) {
   }, []);
 
   useEffect(() => {
+    console.log("setGage typeof:", typeof setGage); // 이거 추가
     const percent = (userInput.length / fullText.length) * 100;
     setGage(percent);
   }, [userInput, setGage]);
@@ -56,9 +57,22 @@ export default function InputArea({ setGage }: InputAreaProps) {
       const wpm = Math.round((wordCount / durationSec) * 60);
       const typoCount = fullText.length - correctChars;
 
+      const accuracyTimeline = fullText
+        .split("")
+        .map((char, i) =>
+          value[i] === undefined ? null : value[i] === char ? 1 : 0
+        );
+
+      // ✅ 결과를 localStorage에 저장
       localStorage.setItem(
         "typingResult",
-        JSON.stringify({ durationSec, wpm, accuracy, typoCount })
+        JSON.stringify({
+          durationSec,
+          wpm,
+          accuracy,
+          typoCount,
+          accuracyTimeline,
+        })
       );
 
       router.push("/result");
