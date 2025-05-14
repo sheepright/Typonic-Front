@@ -13,14 +13,14 @@ monkeytype/
 │ ├── services/
 │ └── database/
 
-components/
+app/
 ├── Typing/
 │ ├── TypingArea.tsx # 타자할 단어 표시
 │ ├── InputArea.tsx # 실제 입력 필드
 │ ├── Timer.tsx # 시간 표시기
 │ └── TypingStats.tsx # 실시간 통계 (WPM, Accuracy)
-├── UI/
-│ ├── Button.tsx # 공통 버튼
+├── UI Component/
+│ ├── MenuBar # 각 모드마다 표시될 메뉴바
 │ ├── ThemeSwitcher.tsx # 테마 토글
 │ ├── Modal.tsx # 모달 컴포넌트
 ├── Result/
