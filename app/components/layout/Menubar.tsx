@@ -14,7 +14,7 @@ export default function Menubar() {
   ];
 
   return (
-    <div className="mt-[10px] w-[600px] h-[40px] flex justify-between items-center bg-cdark px-4 rounded-[5px]">
+    <div className="w-[600px] h-[40px] flex justify-between items-center bg-cdark px-4 rounded-[5px]">
       {menus.map((menu) => (
         <button
           key={menu}
