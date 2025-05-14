@@ -4,24 +4,32 @@ import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import TypingArea from "./TypingArea";
 
-const fullText = `안녕하세요, 여기는 타이핑 연습하는 서비스를 제공하는 웹 사이트입니다.`;
+interface InputAreaProps {
+  setGage: (value: number) => void;
+}
 
-export default function InputArea() {
+const fullText = `#include <studio.h>
+int main() {
+\tprintf("Hello, Typonic!\\n");
+\treturn 0;
+}`;
+
+export default function InputArea({ setGage }: InputAreaProps) {
   const [userInput, setUserInput] = useState("");
   const [startTime, setStartTime] = useState<number | null>(null);
-  const [endTime, setEndTime] = useState<number | null>(null); // ✅ 추가
   const router = useRouter();
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
 
-  const handleClick = () => {
-    inputRef.current?.focus();
-  };
+  useEffect(() => {
+    const percent = (userInput.length / fullText.length) * 100;
+    setGage(percent);
+  }, [userInput, setGage]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
 
     if (value.length === 1 && !startTime) setStartTime(Date.now());
@@ -48,7 +56,6 @@ export default function InputArea() {
       const wpm = Math.round((wordCount / durationSec) * 60);
       const typoCount = fullText.length - correctChars;
 
-      // ✅ 결과를 localStorage에 저장
       localStorage.setItem(
         "typingResult",
         JSON.stringify({ durationSec, wpm, accuracy, typoCount })
@@ -58,17 +65,38 @@ export default function InputArea() {
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Tab") {
+      e.preventDefault();
+      const textarea = inputRef.current;
+      if (!textarea) return;
+
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+
+      const newValue =
+        userInput.substring(0, start) + "\t" + userInput.substring(end);
+      setUserInput(newValue);
+
+      setTimeout(() => {
+        textarea.selectionStart = textarea.selectionEnd = start + 1;
+      }, 0);
+    }
+  };
+
+  const handleClick = () => {
+    inputRef.current?.focus();
+  };
+
   return (
-    <div
-      className="relative w-full max-w-4xl cursor-text"
-      onClick={handleClick}
-    >
+    <div className="relative w-full h-full cursor-text" onClick={handleClick}>
       <TypingArea fullText={fullText} userInput={userInput} />
-      <input
+      <textarea
         ref={inputRef}
         value={userInput}
         onChange={handleChange}
-        className="absolute top-0 left-0 w-full h-full opacity-0"
+        onKeyDown={handleKeyDown}
+        className="absolute top-0 left-0 w-full h-full opacity-0 resize-none"
         autoFocus
       />
     </div>

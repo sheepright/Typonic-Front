@@ -1,5 +1,6 @@
 "use client";
 
+// 초기 세팅 저장
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -34,7 +35,7 @@ export default function ResultPage() {
   return (
     <div className="flex flex-col items-center justify-center h-screen px-4">
       <div className="p-6 border rounded-xl bg-white dark:bg-zinc-800 shadow text-center max-w-md w-full">
-        <h1 className="text-2xl font-bold mb-4">타이핑 결과</h1>
+        <h1 className="font-EF_cucumbersalad">TYPONIC</h1>
         <p>⏱ 소요 시간: {result.durationSec.toFixed(2)}초</p>
         <p>🔤 WPM: {result.wpm}</p>
         <p>🎯 정확도: {result.accuracy}%</p>
