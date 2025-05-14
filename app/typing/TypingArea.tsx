@@ -8,7 +8,7 @@ interface TypingAreaProps {
 
 const TypingArea: React.FC<TypingAreaProps> = ({ fullText, userInput }) => {
   return (
-    <div className="font-mono text-xl leading-relaxed break-words whitespace-pre-wrap">
+    <div className="px-[30px] font-mono text-xl leading-relaxed break-words whitespace-pre-wrap">
       {fullText.split("").map((char, idx) => {
         const typedChar = userInput[idx];
 
