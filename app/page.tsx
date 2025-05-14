@@ -6,8 +6,8 @@ import Word from "./pages/Word";
 export default function Home() {
   return (
     <div>
-      {/* <Main /> */}
-      <Word />
+      <Main />
+      {/* <Word /> */}
     </div>
   );
 }
