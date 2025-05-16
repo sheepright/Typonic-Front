@@ -37,7 +37,7 @@ export default function ResultPage() {
   return (
     <div className="flex flex-col items-center justify-center h-screen px-4">
       <div className="p-6 rounded-xl bg-cdark shadow text-center max-w-md w-full">
-        <h1 className="font-salad">TYPONIC</h1>
+        <h1 className="font-EF_cucumbersalad">TYPONIC</h1>
         <p>⏱ 소요 시간: {result.durationSec.toFixed(2)}초</p>
         <p>🔤 WPM: {result.wpm}</p>
         <p>🎯 정확도: {result.accuracy}%</p>

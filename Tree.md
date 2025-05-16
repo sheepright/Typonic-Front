@@ -1,3 +1,5 @@
+## MonkeyType 구조
+
 monkeytype/
 ├── frontend/
 │ ├── src/
@@ -13,21 +15,37 @@ monkeytype/
 │ ├── services/
 │ └── database/
 
-components/
-├── Typing/
-│ ├── WordDisplay.tsx # 타자할 단어 표시
-│ ├── InputArea.tsx # 실제 입력 필드
-│ ├── Timer.tsx # 시간 표시기
-│ └── TypingStats.tsx # 실시간 통계 (WPM, Accuracy)
-├── UI/
-│ ├── Button.tsx # 공통 버튼
-│ ├── ThemeSwitcher.tsx # 테마 토글
-│ ├── Modal.tsx # 모달 컴포넌트
-├── Result/
-│ ├── ResultSummary.tsx # 결과 요약
-│ ├── AccuracyChart.tsx # 정확도 그래프
-│ └── TypingGraph.tsx # 시간별 WPM 그래프
-├── Settings/
-│ ├── ThemeSettings.tsx
-│ ├── SoundSettings.tsx
-│ └── TypingSettings.tsx
+## Typonic 구조 예시도
+
+app/
+├── components/
+│ ├── layout/ # 레이아웃 구성 요소
+│ │ ├── Header.tsx
+│ │ ├── Footer.tsx
+│ │ ├── Gagebar.tsx
+│ │ └── macOs.tsx # Mac Os 상단 바
+│ ├── menubars/ # 메뉴바 전용 컴포넌트
+│ │ ├── Code.tsx
+│ │ ├── Custom.tsx
+│ │ ├── Main.tsx
+│ │ ├── Result.tsx
+│ │ └── Word.tsx
+│ ├── contents/ # 페이지별 콘텐츠 구성 요소
+│ │ ├── Guide.tsx
+│ │ ├── Ranking.tsx
+│ │ └── Main.tsx # components/Code.tsx > components/contents/Main.tsx
+│
+├── features/ # 주요 기능 묶음 (기능 중심 모듈화)
+│ ├── typing/
+│ │ ├── TypingWords.tsx
+│ │ ├── InputArea.tsx
+│ │ └── TypingArea.tsx
+│ ├── result/ # 결과 창 부분에 app 하위 폴더로 존재해야지 페이지 이동이 가능.
+│ │ ├── Chart.tsx
+│ │ ├── ResultSummary.tsx
+│ │ └── ResultPage.tsx # 이름만 변경
+│
+├── page.tsx # 기존 Main.tsx 내용
+├── layout.tsx # Next.js layout
+├── globals.css
+└── favicon.ico
