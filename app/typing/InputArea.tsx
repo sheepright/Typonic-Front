@@ -25,6 +25,7 @@ export default function InputArea({ setGage }: InputAreaProps) {
   }, []);
 
   useEffect(() => {
+    console.log("setGage typeof:", typeof setGage); // 이거 추가
     const percent = (userInput.length / fullText.length) * 100;
     setGage(percent);
   }, [userInput, setGage]);
