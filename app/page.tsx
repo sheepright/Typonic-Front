@@ -18,6 +18,7 @@ import Word from "./components/contents/Word";
 import Code from "./components/contents/Code";
 import Guide from "./components/contents/Guide";
 import Raking from "./components/contents/Ranking";
+import MacOs from "./components/layout/MacOs";
 
 // 동적 메뉴바
 const DynamicMenubar = ({
@@ -83,8 +84,9 @@ const MainContent = ({
         <Gagebar gage={gage} />
       </div>
       <div className="mt-[15px]">
-        <Code setGage={setGage} />
+        <MacOs />
       </div>
+      <Code setGage={setGage} />
     </>
   );
 };
@@ -95,14 +97,13 @@ export default function Main() {
   const [gage, setGage] = useState(0);
 
   return (
-    <div className="min-h-screen w-full flex justify-center">
-      <div className="w-[1440px] min-h-[1024px] flex flex-col items-center">
-        <Header />
-        <div className="mt-[10px]">
+    <div className="w-full h-screen flex justify-center items-start">
+      <div className="w-full max-w-[1440px] h-full max-h-[1024px] flex flex-col justify-between">
+        <div className="flex flex-col flex-grow items-center">
+          <Header />
           <DynamicMenubar selected={selected} onSelect={setSelected} />
+          <MainContent selected={selected} gage={gage} setGage={setGage} />
         </div>
-        <MainContent selected={selected} gage={gage} setGage={setGage} />
-        <div className="flex-grow" />
         <Footer />
       </div>
     </div>
