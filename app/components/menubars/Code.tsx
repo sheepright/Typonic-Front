@@ -23,7 +23,7 @@ export default function CodeMenubar() {
   ];
 
   return (
-    <div className="w-[900px] h-[40px] flex justify-center items-center bg-cdark px-4 rounded-[5px]">
+    <div className="w-[900px] h-[40px] flex justify-center items-center bg-cdark px-4 rounded-[5px] shadow-lg">
       <div className="flex items-center space-x-6">
         {menu.map((item) => {
           if (item === "Line") {

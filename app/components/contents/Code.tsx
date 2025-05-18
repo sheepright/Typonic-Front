@@ -1,6 +1,6 @@
 "use client";
 
-import InputArea from "@/app/typing/InputArea";
+import InputArea from "@/app/typing/InputCode";
 
 interface CodeProps {
   setGage: (value: number) => void;
@@ -8,12 +8,7 @@ interface CodeProps {
 
 export default function Code({ setGage }: CodeProps) {
   return (
-    <div className="w-[900px] h-[400px] bg-cdark rounded-[5px] shadow-lg">
-      <div className="flex gap-2 p-3">
-        <span className="w-3 h-3 bg-red-500 rounded-full" />
-        <span className="w-3 h-3 bg-yellow-500 rounded-full" />
-        <span className="w-3 h-3 bg-green-500 rounded-full" />
-      </div>
+    <div className="w-[900px] h-auto bg-cdark rounded-br-[5px] rounded-bl-[5px] pb-[10px] shadow-lg">
       <InputArea setGage={setGage} />
     </div>
   );
