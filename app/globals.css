@@ -3,21 +3,22 @@
 :root {
   /* 기본 배경/글자 색 */
   --background: #323437;
-  --foreground: #FFFFFF;
+  --foreground: #ffffff;
 
   /* 컬러 팔레트 */
-  --color-cdark: #2C2E31;
-  --color-cred: #FF5F56;
-  --color-corange: #FFBD2E;
-  --color-cgreen: #27C93F;
-  --color-cblue: #739BD7;
+  --color-cdark: #2c2e31;
+  --color-cred: #ff5f56;
+  --color-corange: #ffbd2e;
+  --color-cgreen: #27c93f;
+  --color-cblue: #739bd7;
+  --color-ccdark: #323437;
 
   /* 폰트 */
-  --font-salad: 'EF_cucumbersalad';
-  --font-corn: 'Ownglyph_corncorn-Rg';
-  --font-dung: 'DungGeunMo';
-  --font-d2: 'D2Coding';
-  --font-paper: 'Paperlogy-8ExtraBold';
+  --font-salad: "EF_cucumbersalad";
+  --font-corn: "Ownglyph_corncorn-Rg";
+  --font-dung: "DungGeunMo";
+  --font-d2: "D2Coding";
+  --font-paper: "Paperlogy-8ExtraBold";
 }
 
 body {
@@ -27,36 +28,36 @@ body {
 
 /* 폰트 정의 */
 @font-face {
-  font-family: 'EF_cucumbersalad';
-  src: url('/fonts/EF_cucumbersalad.woff2') format('woff2');
+  font-family: "EF_cucumbersalad";
+  src: url("/fonts/EF_cucumbersalad.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Ownglyph_corncorn-Rg';
-  src: url('/fonts/Ownglyph_corncorn-Rg.woff2') format('woff2');
+  font-family: "Ownglyph_corncorn-Rg";
+  src: url("/fonts/Ownglyph_corncorn-Rg.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'DungGeunMo';
-  src: url('/fonts/DungGeunMo.woff') format('woff');
+  font-family: "DungGeunMo";
+  src: url("/fonts/DungGeunMo.woff") format("woff");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'D2Coding';
-  src: url('/fonts/D2Coding.woff') format('woff');
+  font-family: "D2Coding";
+  src: url("/fonts/D2Coding.woff") format("woff");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Paperlogy-8ExtraBold';
-  src: url('/fonts/Paperlogy-8ExtraBold.woff2') format('woff2');
+  font-family: "Paperlogy-8ExtraBold";
+  src: url("/fonts/Paperlogy-8ExtraBold.woff2") format("woff2");
   font-weight: 800;
   font-style: normal;
 }
@@ -101,4 +102,17 @@ body {
 
 .bg-cdark {
   background-color: var(--color-cdark);
+}
+
+.bg-ccdark {
+  background-color: var(--color-ccdark);
+}
+
+/* 스크롤 바 숨기기 기능 */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

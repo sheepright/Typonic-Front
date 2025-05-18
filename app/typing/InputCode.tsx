@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import TypingArea from "./TypingArea";
+import TypingArea from "./TypingCode";
 
 interface InputAreaProps {
   setGage: (value: number) => void;
@@ -54,7 +54,7 @@ export default function InputArea({ setGage }: InputAreaProps) {
         .filter((c, i) => c === fullText[i]).length;
       const accuracy = Math.round((correctChars / fullText.length) * 100);
       const wordCount = fullText.trim().split(/\s+/).length;
-      const wpm = Math.round((wordCount / durationSec) * 60);
+      const wpm = Math.round((wordCount / durationSec) * 60 * 5);
       const typoCount = fullText.length - correctChars;
 
       const accuracyTimeline = fullText
