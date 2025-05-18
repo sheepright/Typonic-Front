@@ -19,6 +19,7 @@ import Code from "./components/contents/Code";
 import Word from "./components/contents/Word";
 import Guide from "./components/contents/Guide";
 import Raking from "./components/contents/Ranking";
+import MacOs from "./components/layout/MacOs";
 
 //Custom Component
 import Custom from "./components/contents/custom/Main";
