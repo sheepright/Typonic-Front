@@ -18,7 +18,7 @@ export default function Menubar({ onSelect, selected }: MenubarProps) {
   ];
 
   return (
-    <div className="w-[600px] h-[40px] flex justify-center items-center bg-cdark px-4 rounded-[5px] shadow-[0px_1px_1px_rgba(0,0,0,0.25)]">
+    <div className="w-[600px] h-[40px] flex justify-center items-center bg-cdark px-4 rounded-[5px] shadow-lg">
       <div className="flex items-center space-x-6">
         {menus.map((menu) =>
           menu === "Line" ? (

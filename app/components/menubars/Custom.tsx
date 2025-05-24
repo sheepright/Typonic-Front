@@ -1,14 +1,18 @@
 "use client";
 
-import { useState } from "react";
+interface CustomMenubarProps {
+  selectedMode: string;
+  setSelectedMode: (mode: string) => void;
+}
 
-export default function Custom() {
-  const [selectedMode, setSelectedMode] = useState("키워드");
-
+export default function CustomMenubar({
+  selectedMode,
+  setSelectedMode,
+}: CustomMenubarProps) {
   const menu = ["커스텀 연습", "Line", "키워드", "복.붙", "파일 첨부"];
 
   return (
-    <div className="w-[600px] h-[40px] flex justify-center items-center bg-cdark px-4 rounded-[5px]">
+    <div className="w-[600px] h-[40px] flex justify-center items-center bg-cdark px-4 rounded-[5px] shadow-lg">
       <div className="flex items-center space-x-6">
         {menu.map((item) => {
           if (item === "Line") {

@@ -39,7 +39,7 @@ export default function ResultPage() {
       <div className="p-6 rounded-xl bg-cdark shadow text-center max-w-md w-full">
         <h1 className="font-EF_cucumbersalad">TYPONIC</h1>
         <p>⏱ 소요 시간: {result.durationSec.toFixed(2)}초</p>
-        <p>🔤 WPM: {result.wpm}</p>
+        <p>🔤 타수(wpm*5): {result.wpm}</p>
         <p>🎯 정확도: {result.accuracy}%</p>
         <p>❌ 오타 수: {result.typoCount}</p>
         <Chart timeline={result.accuracyTimeline} />
