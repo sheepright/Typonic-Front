@@ -72,6 +72,7 @@ export default function InputArea({ setGage }: InputAreaProps) {
           accuracy,
           typoCount,
           accuracyTimeline,
+          savedAt: new Date().toISOString(),
         })
       );
 

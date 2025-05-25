@@ -100,28 +100,21 @@ body {
   background-color: var(--color-cblue);
 }
 
+
 .bg-cdark {
   background-color: var(--color-cdark);
 }
 
-<<<<<<< HEAD
-=======
 .bg-ccdark {
   background-color: var(--color-ccdark);
 }
 
+
 /* 스크롤 바 숨기기 기능 */
->>>>>>> main
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
 .scrollbar-hide {
-<<<<<<< HEAD
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;     /* Firefox */
-}
-=======
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
->>>>>>> main

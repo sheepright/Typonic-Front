@@ -21,11 +21,14 @@ export default function Chart({ timeline }: ChartProps) {
   }));
 
   return (
-    <div className="mt-8">
-      <h3 className="text-lg font-semibold mb-2">입력 정확도 변화</h3>
-      <ResponsiveContainer width="100%" height={200}>
+    <div className="mt-8 bg-[#2C2E31]" >
+      <ResponsiveContainer width="100%" height={320}>
         <LineChart data={data}>
-          <XAxis dataKey="index" hide />
+          <XAxis
+            dataKey="index"
+            label={{ value: "시도", position: "insideBottom", offset: -5 }}
+            tick={{ fill: "#2C2E31" }}
+          />
           <YAxis domain={[0, 100]} tickFormatter={(v) => `${v}%`} />
           <Tooltip formatter={(value: any) => `${value}%`} />
           <Line
