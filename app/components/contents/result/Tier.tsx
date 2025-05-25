@@ -8,14 +8,27 @@ interface Result {
   accuracyTimeline: (number | null)[];
 }
 
+interface AccuracyPoint {
+  timeSec: number;
+  wpm: number;
+  accuracy: number;
+}
+
 interface TierProps {
-  result: Result;
+  result: {
+    durationSec: number;
+    wpm: number;
+    accuracy: number;
+    typoCount: number;
+    accuracyTimeline: AccuracyPoint[];
+    savedAt: string;
+  };
 }
 
 export default function Tier({ result }: TierProps) {
   const { wpm } = result;
 
-  // 티어 계산 -> 사진나오면 바꿀거임 (wpm에 따라 class 결정)
+  // 티어 계산 -> 사진나오고 세분화되면 바꿀거임 (wpm에 따라 class 결정)
   let tier = "class1";
   let speedRange = "0Km/h ~ 10Km/h";
   let stars = 1;
@@ -59,23 +72,27 @@ export default function Tier({ result }: TierProps) {
   }
 
   return (
-    <div className="w-[900px] bg-[#2C2E31] text-white rounded p-6">
-      <h2 className="text-center text-2xl mb-4">당신의 타이핑 속도는?</h2>
-      <h3 className="text-center text-4xl font-bold mb-6">{wpm} WPM</h3>
+    <div className="w-[900px] bg-[#323437] text-white p-6 font-paper">
+        <p className="text-start font-semibold text-[25px]">
+            당신의 타이핑 속도는?
+        </p>
+        <p className="text-start font-semibold text-[40px]">
+            {wpm} WPM
+        </p>
 
       <div className="flex gap-4">
-        {/* 왼쪽 이미지 박스 */}
+        {/* 왼쪽 이미지 */}
         <div className="w-[800px] h-[533px] bg-white rounded flex items-center justify-center">
           <span className="text-black">사진 나오면 여기에</span>
         </div>
 
         {/* 오른쪽 티어 정보 */}
         <div className="w-1/2 flex flex-col justify-center">
-          <p className="text-xl mb-2">🏆 <span className="font-bold">{tier}</span></p>
-          <p className="text-md mb-4">🚀 {speedRange}</p>
+          <p className="text-start font-semibold text-[40px]"><span className="font-bold">{tier}</span></p>
+          <p className="text-start font-semibold text-[25px]">{speedRange}</p>
           <div className="flex">
             {Array.from({ length: stars }).map((_, i) => (
-              <span key={i} className="text-yellow-400 text-2xl">★</span>
+              <span key={i} className="text-yellow-400 text-[25px]">★</span>
             ))}
           </div>
         </div>

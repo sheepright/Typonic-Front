@@ -1,15 +1,32 @@
 "use client";
 
-interface Result {
-  durationSec: number;
+interface AccuracyPoint {
+  timeSec: number;
   wpm: number;
   accuracy: number;
-  typoCount: number;
-  accuracyTimeline: (number | null)[];
 }
 
 interface PostRankProps {
-  result: Result;
+  result: {
+    durationSec: number;
+    wpm: number;
+    accuracy: number;
+    typoCount: number;
+    accuracyTimeline: AccuracyPoint[]; 
+    savedAt: string;
+  };
+}
+
+
+interface PostRankProps {
+    result: {
+    durationSec: number;
+    wpm: number;
+    accuracy: number;
+    typoCount: number;
+    accuracyTimeline: AccuracyPoint[];
+    savedAt: string;
+  };
 }
 
 export default function PostRank({ result }: PostRankProps) {

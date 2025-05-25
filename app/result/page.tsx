@@ -11,12 +11,18 @@ import MacOs from "../components/layout/MacOs";
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
 
+interface AccuracyPoint {
+  timeSec: number;
+  wpm: number;
+  accuracy: number;
+}
+
 interface Result {
   durationSec: number;
   wpm: number;
   accuracy: number;
   typoCount: number;
-  accuracyTimeline: (number | null)[];
+  accuracyTimeline: AccuracyPoint[];
   savedAt: string;
 }
 
@@ -45,36 +51,36 @@ export default function ResultPage() {
   const renderContent = () => {
     switch (selectedResult) {
       case "등급 산정":
-      return (      
-        <div className="mt-[50px]">
-          <Tier result={result}/>
-        </div>
-      );
-    case "상세 정보":
-      return (      
-        <div className="mt-[50px]">
-          <Detail result={result}/>
-        </div>
-      );
-    case "그래프":
-      return (      
-        <div className="mt-[15px]">
-          <div className="w-[900px] bg-[#2C2E31] rounded-[5px]">
-            <MacOs  styleType="type1"/>
-            <div className="p-4">
-              <Chart timeline={result.accuracyTimeline} />
+        return (
+          <div className="mt-[50px]">
+            <Tier result={result} />
+          </div>
+        );
+      case "상세 정보":
+        return (
+          <div className="mt-[50px]">
+            <Detail result={result} />
+          </div>
+        );
+      case "그래프":
+        return (
+          <div className="mt-[15px]">
+            <div className="w-[900px] bg-[#2C2E31] rounded-[5px]">
+              <MacOs styleType="type1" />
+              <div className="p-4">
+                <Chart timeline={result.accuracyTimeline} durationSec={result.durationSec} />
+              </div>
             </div>
           </div>
-        </div>
-      );
-    case "랭킹 등록":
-      return (      
-        <div className="mt-[50px]">
-          <PostRank result={result}/>
-        </div>
-      );
-    default:
-      return null;
+        );
+      case "랭킹 등록":
+        return (
+          <div className="mt-[50px]">
+            <PostRank result={result} />
+          </div>
+        );
+      default:
+        return null;
     }
   };
 
@@ -88,12 +94,12 @@ export default function ResultPage() {
             selectedResult={selectedResult}
             setSelectedResult={setSelectedResult}
           />
-          </div>
-          <div className="flex justify-center items-center flex-grow">
-            {renderContent()}
-          </div>
-          <Footer />
+        </div>
+        <div className="flex justify-center items-center flex-grow">
+          {renderContent()}
+        </div>
+        <Footer />
       </div>
     </div>
-);
+  );
 }
