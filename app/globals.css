@@ -4,26 +4,28 @@
   /* 기본 배경/글자 색 */
   --background: #323437;
   --foreground: #ffffff;
+}
 
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+@theme {
   /* 컬러 팔레트 */
+  --color-root: #323437;
   --color-cdark: #2c2e31;
   --color-cred: #ff5f56;
   --color-corange: #ffbd2e;
   --color-cgreen: #27c93f;
   --color-cblue: #739bd7;
-  --color-ccdark: #323437;
 
   /* 폰트 */
   --font-salad: "EF_cucumbersalad";
   --font-corn: "Ownglyph_corncorn-Rg";
   --font-dung: "DungGeunMo";
   --font-d2: "D2Coding";
-  --font-paper: "Paperlogy-8ExtraBold";
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
+  --font-paper: "Paperlogy-6SemiBold";
 }
 
 /* 폰트 정의 */
@@ -56,56 +58,10 @@ body {
 }
 
 @font-face {
-  font-family: "Paperlogy-8ExtraBold";
-  src: url("/fonts/Paperlogy-8ExtraBold.woff2") format("woff2");
+  font-family: "Paperlogy-6SemiBold";
+  src: url("/fonts/Paperlogy-6SemiBold.woff2") format("woff2");
   font-weight: 800;
   font-style: normal;
-}
-
-/* 폰트 클래스 */
-.font-salad {
-  font-family: var(--font-salad);
-}
-
-.font-corn {
-  font-family: var(--font-corn);
-}
-
-.font-dung {
-  font-family: var(--font-dung);
-}
-
-.font-d2 {
-  font-family: var(--font-d2);
-}
-
-.font-paper {
-  font-family: var(--font-paper);
-}
-
-/* 컬러 유틸 클래스 예시 (선택적으로 사용 가능) */
-.bg-cred {
-  background-color: var(--color-cred);
-}
-
-.bg-corange {
-  background-color: var(--color-corange);
-}
-
-.bg-cgreen {
-  background-color: var(--color-cgreen);
-}
-
-.bg-cblue {
-  background-color: var(--color-cblue);
-}
-
-.bg-cdark {
-  background-color: var(--color-cdark);
-}
-
-.bg-ccdark {
-  background-color: var(--color-ccdark);
 }
 
 /* 스크롤 바 숨기기 기능 */

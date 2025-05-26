@@ -12,11 +12,11 @@ export default function Main() {
   const isWordMode = selectedOption === "단어";
 
   // 공통 스타일 + 조건부 스타일
-  const inputStyle = `h-[35px] rounded-[5px] text-[25px] font-corn text-center bg-ccdark pt-[4px]
+  const inputStyle = `h-[35px] rounded-[5px] text-[25px] font-corn text-center bg-root pt-[4px]
     ${isWordMode ? "w-[438px]" : "w-[589px]"} 
   `;
 
-  const selectStyle = `w-[141px] h-[35px] rounded-[5px] text-[25px] font-corn text-center bg-ccdark pt-[5px]
+  const selectStyle = `w-[141px] h-[35px] rounded-[5px] text-[25px] font-corn text-center bg-root pt-[5px]
     ${isWordMode ? "mr-[28px]" : "mr-[37px]"} 
   `;
 

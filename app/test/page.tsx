@@ -19,7 +19,7 @@ export default function TestPage() {
 
   const handleCodeSubmit = async () => {
     try {
-      const res = await axios.post("http://localhost:8080/api/code", {
+      const res = await axios.post("https://api.typonic.co.kr/gpt/code", {
         language,
         length,
       });
@@ -31,7 +31,7 @@ export default function TestPage() {
 
   const handleWordSubmit = async () => {
     try {
-      const res = await axios.post("http://localhost:8080/api/words", {
+      const res = await axios.post("https://api.typonic.co.kr/gpt/words", {
         language,
         count,
       });
@@ -45,8 +45,8 @@ export default function TestPage() {
     try {
       const url =
         keywordType === "word"
-          ? "http://localhost:8080/api/wordKeyword"
-          : "http://localhost:8080/api/sentenceKeyword";
+          ? "https://api.typonic.co.kr/gpt/wordKeyword"
+          : "https://api.typonic.co.kr/gpt/sentenceKeyword";
 
       const payload =
         keywordType === "word" ? { keyword, count: keywordCount } : { keyword };
@@ -61,6 +61,10 @@ export default function TestPage() {
   return (
     <div className="p-8 space-y-8">
       <h1 className="text-xl font-bold">🔥 GPT 코드 생성 테스트</h1>
+
+      <div className="text-[25px] font-bold text-[#fffff] text-shadow-[-0.3px_-0.3px_0_#ffffff88]">
+        Text-shadow Test
+      </div>
 
       {/* 언어 선택 */}
       <div className="space-x-2">

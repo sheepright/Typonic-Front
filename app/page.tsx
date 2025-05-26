@@ -15,11 +15,11 @@ import WordMenubar from "./components/menubars/Word";
 import CustomMenubar from "./components/menubars/Custom";
 
 // Contents Component
+import MainCode from "./components/contents/Main";
 import Code from "./components/contents/Code";
 import Word from "./components/contents/Word";
 import Guide from "./components/contents/Guide";
 import Raking from "./components/contents/Ranking";
-import MacOs from "./components/layout/MacOs";
 
 //Custom Component
 import Custom from "./components/contents/custom/Main";
@@ -68,6 +68,19 @@ const MainContent = ({
   setGage: (val: number) => void;
   customMode: string;
 }) => {
+  if (selected === "코드 연습") {
+    return (
+      <>
+        <div className="mt-[90px]">
+          <Gagebar gage={gage} />
+        </div>
+        <div className="mt-[15px]">
+          <MacOs styleType="type1" />
+        </div>
+        <Code setGage={setGage} />
+      </>
+    );
+  }
   if (selected === "코드 단어 연습") {
     return (
       <>
@@ -112,7 +125,7 @@ const MainContent = ({
       <div className="mt-[15px]">
         <MacOs styleType="type1" />
       </div>
-      <Code setGage={setGage} />
+      <MainCode setGage={setGage} />
     </>
   );
 };

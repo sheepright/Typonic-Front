@@ -56,7 +56,7 @@ export default function Ranking() {
             <div
               key={index}
               className={`flex h-[35px] ${
-                index % 2 === 0 ? "bg-[#323437]" : "bg-[#2A2C2E]"
+                index % 2 === 0 ? "bg-root" : "bg-cdark"
               } text-[18px] ${rankColor}`}
             >
               <div className="w-[50px] flex items-center justify-center">
