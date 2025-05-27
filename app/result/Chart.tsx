@@ -54,7 +54,7 @@ export default function Chart({ timeline = [], durationSec }: ChartProps) {
           <Line
             type="monotone"
             dataKey="typingSpeed"
-            stroke="#4ade80"
+            stroke="#565656"
             dot={false}
             name="타수"
           />
