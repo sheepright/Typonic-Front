@@ -1,8 +1,16 @@
 "use client";
+import React from "react";
 
-export default function Header() {
+export default function Header({
+  onClick,
+}: {
+  onClick?: React.MouseEventHandler<HTMLElement>;
+}) {
   return (
-    <header className="mt-[145px] w-[250px] h-[85px]">
+    <header
+      className="mt-[145px] w-[250px] h-[85px] cursor-pointer"
+      onClick={onClick}
+    >
       <div className="flex items-center">
         <img
           src="/images/Logo.png"

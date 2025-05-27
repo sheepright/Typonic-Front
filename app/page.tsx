@@ -140,7 +140,7 @@ export default function Main() {
     <div className="w-full h-screen flex justify-center items-start">
       <div className="w-full max-w-[1440px] h-full max-h-[1024px] flex flex-col justify-between">
         <div className="flex flex-col flex-grow items-center">
-          <Header />
+          <Header onClick={() => setSelected(null)} />
           <div className="mt-[10px]">
             <DynamicMenubar
               selected={selected}
