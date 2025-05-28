@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { generateWords } from "@/app/api/api";
 
-export default function Word() {
+export default function WordMenubar() {
   const [selectedLanguage, setSelectedLanguage] = useState("C++");
   const [selectedCount, setSelectedCount] = useState("10개");
 
