@@ -61,9 +61,9 @@ export const getTop50 = async (): Promise<TopUser[]> => {
 
 // 백분위 조회
 export const getPercentile = async (
-  score: number
+  wpm: number
 ): Promise<{ percentile: number }> => {
-  const res = await api.get("/db/percentile", { params: { score } });
+  const res = await api.get("/db/percentile", { params: { wpm } });
   return res.data;
 };
 

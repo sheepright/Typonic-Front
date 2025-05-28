@@ -1,12 +1,16 @@
 "use client";
 
-import { useState } from "react";
+interface ResultMenuProps {
+  selectedResult: string;
+  setSelectedResult: (item: string) => void;
+}
 
-export default function Result() {
-  const [selectedResult, setSelectedResult] = useState("등급 산정");
-
+export default function ResultMenubar({
+  selectedResult,
+  setSelectedResult,
+}: ResultMenuProps) {
   const menu = [
-    "결과",
+    "결과", // 항상 선택된 라벨
     "Line",
     "등급 산정",
     "상세 정보",
@@ -21,36 +25,31 @@ export default function Result() {
           if (item === "Line") {
             return (
               <div
-                key={Math.random()}
+                key={`line-${item}`}
                 className="w-[1px] h-[15px] bg-white opacity-50 rounded-full"
               />
             );
           }
 
-          const alwaysSelected = item === "결과";
-          const isResult = [
-            "등급 산정",
-            "상세 정보",
-            "그래프",
-            "랭킹 등록",
-          ].includes(item);
-          const isSelected =
-            alwaysSelected || (isResult && selectedResult === item);
+          const isAlwaysSelected = item === "결과";
+          const isClickable = !isAlwaysSelected;
+          const isSelected = isAlwaysSelected || selectedResult === item;
 
           const handleClick = () => {
-            if (isResult) {
+            if (isClickable) {
               setSelectedResult(item);
             }
           };
 
           return (
             <button
-              key={item}
+              key={`menu-${item}`}
               onClick={handleClick}
               className={`text-base border-0 bg-transparent font-dung transition-opacity duration-200 text-[white] text-[15px] ${
                 isSelected ? "opacity-100" : "opacity-20"
-              }`}
+              } ${isAlwaysSelected ? "cursor-default" : "cursor-pointer"}`}
               style={isSelected ? { WebkitTextStroke: "0.2px white" } : {}}
+              disabled={!isClickable}
             >
               {item}
             </button>
