@@ -12,7 +12,7 @@ export default () => {
           </div>
           <div className="relative">
             <input
-              className={`w-[800px] h-[35px] rounded-[5px] text-[25px] font-corn text-center bg-ccdark pt-[4px] pr-10`}
+              className={`w-[800px] h-[35px] rounded-[5px] text-[25px] font-corn text-center bg-root pt-[4px] pr-10`}
               style={{
                 boxShadow: "inset 1px 1px 1px rgba(0, 0, 0, 0.25)",
               }}

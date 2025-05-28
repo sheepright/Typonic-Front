@@ -15,6 +15,7 @@ import WordMenubar from "./components/menubars/Word";
 import CustomMenubar from "./components/menubars/Custom";
 
 // Contents Component
+import MainCode from "./components/contents/Main";
 import Code from "./components/contents/Code";
 import Word from "./components/contents/Word";
 import Guide from "./components/contents/Guide";
@@ -67,6 +68,19 @@ const MainContent = ({
   setGage: (val: number) => void;
   customMode: string;
 }) => {
+  if (selected === "코드 연습") {
+    return (
+      <>
+        <div className="mt-[90px]">
+          <Gagebar gage={gage} />
+        </div>
+        <div className="mt-[15px]">
+          <MacOs styleType="type1" />
+        </div>
+        <Code setGage={setGage} />
+      </>
+    );
+  }
   if (selected === "코드 단어 연습") {
     return (
       <>
@@ -111,7 +125,7 @@ const MainContent = ({
       <div className="mt-[15px]">
         <MacOs styleType="type1" />
       </div>
-      <Code setGage={setGage} />
+      <MainCode setGage={setGage} />
     </>
   );
 };
@@ -126,7 +140,7 @@ export default function Main() {
     <div className="w-full h-screen flex justify-center items-start">
       <div className="w-full max-w-[1440px] h-full max-h-[1024px] flex flex-col justify-between">
         <div className="flex flex-col flex-grow items-center">
-          <Header />
+          <Header onClick={() => setSelected(null)} />
           <div className="mt-[10px]">
             <DynamicMenubar
               selected={selected}

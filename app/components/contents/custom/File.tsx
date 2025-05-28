@@ -25,7 +25,7 @@ export default function FileUploadSection() {
               className="absolute inset-0 opacity-0 cursor-pointer z-10"
             />
             <div
-              className="w-[800px] h-[35px] rounded-[5px] text-[20px] font-corn text-center bg-ccdark pt-[4px] pr-10 relative pointer-events-none"
+              className="w-[800px] h-[35px] rounded-[5px] text-[20px] font-corn text-center bg-root pt-[4px] pr-10 relative pointer-events-none"
               style={{
                 boxShadow: "inset 1px 1px 1px rgba(0, 0, 0, 0.25)",
               }}
