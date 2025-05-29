@@ -1,3 +1,5 @@
+// ResultPage.tsx
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -10,6 +12,7 @@ import PostRank from "../components/contents/result/PostRank";
 import MacOs from "../components/layout/MacOs";
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
+import { getPercentile } from "@/app/api/api";
 
 interface AccuracyPoint {
   timeSec: number;
@@ -23,10 +26,12 @@ interface Result {
   accuracy: number;
   typoCount: number;
   accuracyTimeline: AccuracyPoint[];
+  percentile: number;
   savedAt: string;
 }
 
 export default function ResultPage() {
+  const [selected, setSelected] = useState<string | null>(null);
   const router = useRouter();
   const [result, setResult] = useState<Result | null>(null);
   const [selectedResult, setSelectedResult] = useState<string>("등급 산정");
@@ -41,6 +46,20 @@ export default function ResultPage() {
     try {
       const parsed: Result = JSON.parse(data);
       setResult(parsed);
+
+      const fetchPercentile = async () => {
+        try {
+          const percentile = await getPercentile(parsed.wpm);
+          const updated = { ...parsed, percentile };
+          setResult(updated);
+
+          localStorage.setItem("typingResult", JSON.stringify(updated));
+        } catch (error) {
+          console.error("Percentile API error:", error);
+        }
+      };
+
+      fetchPercentile();
     } catch (e) {
       router.replace("/");
     }
@@ -91,7 +110,7 @@ export default function ResultPage() {
     <div className="w-full h-screen flex justify-center items-start">
       <div className="w-full max-w-[1440px] h-full max-h-[1024px] flex flex-col justify-between">
         <div className="flex flex-col items-center">
-          <Header />
+          <Header onClick={() => setSelected(null)} />
           <div className="mt-[10px]"></div>
           <ResultMenubar
             selectedResult={selectedResult}
