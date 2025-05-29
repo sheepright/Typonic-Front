@@ -34,7 +34,7 @@ export default function PostRank({ result }: PostRankProps) {
     const fetchPercentile = async () => {
       try {
         const res = await getPercentile(result.wpm);
-        setPercentile(res.percentile);
+        setPercentile(res);
       } catch (error) {
         console.error("Percentile API error:", error);
       }
