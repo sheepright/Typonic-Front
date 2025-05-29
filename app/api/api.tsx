@@ -83,20 +83,20 @@ export const generateWords = async (
   return res.data;
 };
 
-
-// 키워드 기반 단어 생성
-export const generateWordKeyword = async (data: KeywordRequest): Promise<{ words: string[] }> => {
-  const res = await api.post('/gpt/wordKeyword', data);
+export const generateWordKeyword = async (
+  data: KeywordRequest
+): Promise<{ words: string[] }> => {
+  const res = await api.post("/gpt/wordKeyword", data);
   return res.data;
 };
 
-// 키워드 기반 문장 생성
 export const generateSentenceKeyword = async (
   data: SentenceKeywordRequest
 ): Promise<{ sentences: string[] }> => {
-  const res = await api.post('/gpt/sentenceKeyword', data);
+  const res = await api.post("/gpt/sentenceKeyword", data);
   return res.data;
 };
+
 
 // 코드 예제 생성
 export const generateCodeExample = async (

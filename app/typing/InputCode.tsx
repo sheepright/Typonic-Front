@@ -6,29 +6,28 @@ import TypingArea from "./TypingCode";
 
 interface InputAreaProps {
   setGage: (value: number) => void;
+  fullText: string;
 }
 
-const fullText = `#include <studio.h>
-int main() {
-\tprintf("Hello, Typonic!\\n");
-\treturn 0;
-}`;
-
-export default function InputArea({ setGage }: InputAreaProps) {
+export default function InputArea({ setGage, fullText }: InputAreaProps) {
   const [userInput, setUserInput] = useState("");
   const [startTime, setStartTime] = useState<number | null>(null);
   const router = useRouter();
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
+    setUserInput("");
+    setStartTime(null);
+  }, [fullText]);
+
+  useEffect(() => {
     inputRef.current?.focus();
   }, []);
 
   useEffect(() => {
-    console.log("setGage typeof:", typeof setGage); // 이거 추가
     const percent = (userInput.length / fullText.length) * 100;
     setGage(percent);
-  }, [userInput, setGage]);
+  }, [userInput, setGage, fullText]);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
@@ -63,7 +62,6 @@ export default function InputArea({ setGage }: InputAreaProps) {
           value[i] === undefined ? null : value[i] === char ? 1 : 0
         );
 
-      // ✅ 결과를 localStorage에 저장
       localStorage.setItem(
         "typingResult",
         JSON.stringify({

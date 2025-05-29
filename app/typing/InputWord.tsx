@@ -9,122 +9,96 @@ interface TypingWordsInputProps {
   words: string[];
 }
 
-export default function InputWord({ setGage }: TypingWordsInputProps) {
-  const [words, setWords] = useState<string[]>([]);
+export default function InputWord({ setGage, words }: TypingWordsInputProps) {
   const [curIdx, setCurIdx] = useState(0);
   const [mode, setMode] = useState<"initial" | "fixed">("initial");
   const [pos, setPos] = useState(0);
   const [input, setInput] = useState("");
   const [start, setStart] = useState<number | null>(null);
   const [timeline, setTimeline] = useState<(0 | 1)[]>([]);
+  const [isComposing, setIsComposing] = useState(false);
 
-  const versionRef = useRef<string | null>(null);
   const router = useRouter();
+  const taRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    const load = () => {
-      const raw = localStorage.getItem("typingWords");
-      if (raw) {
-        try {
-          const arr = JSON.parse(raw) as string[];
-          const clean = arr.map((w) => w.trim().replace(/[`~]/g, ""));
-          setWords(clean);
-        } catch {
-          setWords([]);
-        }
-      } else {
-        setWords([]);
-      }
-    };
-    load();
-
-    const iv = setInterval(() => {
-      const v = localStorage.getItem("wordsVersion");
-      if (versionRef.current !== v) {
-        versionRef.current = v;
-        load();
-        resetAll();
-      }
-    }, 300);
-
-    return () => clearInterval(iv);
-  }, []);
-
-  const resetAll = () => {
-    setInput("");
     setCurIdx(0);
     setMode("initial");
     setPos(0);
+    setInput("");
     setStart(null);
     setTimeline([]);
-  };
-
-  const taRef = useRef<HTMLTextAreaElement>(null);
-  useEffect(() => {
-    taRef.current?.focus();
   }, [words]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    let val = e.target.value;
+  useEffect(() => {
+    taRef.current?.focus();
+  }, []);
+
+  const moveToNextWord = () => {
     const word = words[curIdx] || "";
+    const updatedTimeline = [
+      ...timeline,
+      ...input.split("").map((c, i) => (c === word[i] ? 1 : 0)) as (0 | 1)[]
+    ];
+    setTimeline(updatedTimeline);
 
-    if (!start && val.length) setStart(Date.now());
+    const doneChars = words.slice(0, curIdx).join("").length + word.length;
+    setGage((doneChars / words.join("").length) * 100);
 
-    if (val.length > word.length) {
-      val = val.slice(0, word.length);
+    setInput("");
+    setCurIdx((prev) => prev + 1);
+
+    if (mode === "initial") {
+      pos < 3 ? setPos((p) => p + 1) : setMode("fixed");
     }
 
-    if (val.length === word.length && input.length < word.length) {
-      const lastChar = val[val.length - 1];
-      setTimeline((t) => [...t, lastChar === word[val.length - 1] ? 1 : 0]);
+    if (curIdx + 1 >= words.length && start) {
+      const durationSec = (Date.now() - start) / 1000;
+      const correctChars = updatedTimeline.filter((v) => v === 1).length;
+      const typoCount = updatedTimeline.filter((v) => v === 0).length;
+      const totalTyped = updatedTimeline.length;
+      const accuracyPct = totalTyped ? Math.round((correctChars / totalTyped) * 100) : 0;
+      const wpm = Math.round((words.length / durationSec) * 60 * 5);
 
-      const doneChars = words.slice(0, curIdx).join("").length + val.length;
-      setGage((doneChars / words.join("").length) * 100);
+      localStorage.setItem("typingResult", JSON.stringify({
+        durationSec,
+        wpm,
+        accuracy: accuracyPct,
+        typoCount,
+        accuracyTimeline: updatedTimeline,
+      }));
 
-      setInput("");
-      setCurIdx((i) => i + 1);
+      router.push("/result");
+    }
+  };
 
-      if (mode === "initial") {
-        if (pos < 3) setPos((p) => p + 1);
-        else setMode("fixed");
-      }
-
-      if (curIdx + 1 >= words.length && start) {
-        const durationSec = (Date.now() - start) / 1000;
-        const correctChars = timeline.filter((v) => v === 1).length;
-        const typoCount = timeline.filter((v) => v === 0).length;
-        const totalTyped = timeline.length;
-        const accuracyPct = totalTyped ? Math.round((correctChars / totalTyped) * 100) : 0;
-        const wpm = Math.round((words.length / durationSec) * 60 * 5);
-
-        localStorage.setItem("typingResult", JSON.stringify({
-          durationSec,
-          wpm,
-          accuracy: accuracyPct,
-          typoCount,
-          accuracyTimeline: timeline,
-        }));
-        router.push("/result");
-      }
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (isComposing) {
+      setInput(e.target.value);
       return;
     }
 
-    if (val.length > input.length) {
-      const ch = val[val.length - 1];
-      setTimeline((t) => [...t, ch === word[val.length - 1] ? 1 : 0]);
-      const doneChars = words.slice(0, curIdx).join("").length + val.length;
-      setGage((doneChars / words.join("").length) * 100);
-    } else if (val.length < input.length) {
-      const rem = input.length - val.length;
-      setTimeline((t) => t.slice(0, t.length - rem));
+    const val = e.target.value;
+    const word = words[curIdx] || "";
+
+    if (!start && val.length > 0) {
+      setStart(Date.now());
     }
 
     setInput(val);
+
+    // 입력이 정확하든 틀리든 글자 수가 맞으면 다음 단어로 이동
+    if (val.length >= word.length) {
+      moveToNextWord();
+    }
   };
 
-  if (!words.length) {
-    return <div className="text-white">단어가 없습니다.</div>;
-  }
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === " ") {
+      e.preventDefault();
+      moveToNextWord();
+    }
+  };
 
   return (
     <div className="relative w-full h-full">
@@ -137,9 +111,12 @@ export default function InputWord({ setGage }: TypingWordsInputProps) {
       />
       <textarea
         ref={taRef}
-        className="absolute inset-0 w-full h-full opacity-0 resize-none"
         value={input}
         onChange={handleChange}
+        onKeyDown={handleKeyDown}
+        onCompositionStart={() => setIsComposing(true)}
+        onCompositionEnd={() => setIsComposing(false)}
+        className="absolute inset-0 w-full h-full opacity-0 resize-none"
         autoFocus
       />
     </div>
