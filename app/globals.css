@@ -25,7 +25,7 @@ body {
   --font-corn: "Ownglyph_corncorn-Rg";
   --font-dung: "DungGeunMo";
   --font-d2: "D2Coding";
-  --font-paper: "Paperlogy-6SemiBold";
+  --font-paper: "Paperlogy";
 }
 
 /* 폰트 정의 */
@@ -58,8 +58,15 @@ body {
 }
 
 @font-face {
-  font-family: "Paperlogy-6SemiBold";
+  font-family: "Paperlogy";
   src: url("/fonts/Paperlogy-6SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Paperlogy";
+  src: url("/fonts/Paperlogy-8ExtraBold.woff2") format("woff2");
   font-weight: 800;
   font-style: normal;
 }
