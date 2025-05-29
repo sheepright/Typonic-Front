@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import TypingWord from "./TypingWord";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import TypingWord from "./TypingWord";
 
 interface TypingWordsInputProps {
   setGage: (value: number) => void;
@@ -10,89 +10,101 @@ interface TypingWordsInputProps {
 }
 
 export default function InputWord({ setGage, words }: TypingWordsInputProps) {
-  const [curIdx, setCurIdx] = useState(0);
-  const [mode, setMode] = useState<"initial" | "fixed">("initial");
-  const [pos, setPos] = useState(0);
-  const [input, setInput] = useState("");
-  const [start, setStart] = useState<number | null>(null);
-  const [timeline, setTimeline] = useState<(0 | 1)[]>([]);
-  const [isComposing, setIsComposing] = useState(false);
+  const [userInput, setUserInput] = useState("");                  // 현재 입력 중인 문자열
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);     // 현재 입력할 단어 인덱스
+  const [startTime, setStartTime] = useState<number | null>(null); // 시작 시간
+  const [accuracyTimeline, setAccuracyTimeline] = useState<(0 | 1)[]>([]); // 정확도 기록
+  const [isComposing, setIsComposing] = useState(false);           // 한글 조합 중 여부
 
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const router = useRouter();
-  const taRef = useRef<HTMLTextAreaElement>(null);
 
+  // 단어 리스트가 바뀌면 초기화
   useEffect(() => {
-    setCurIdx(0);
-    setMode("initial");
-    setPos(0);
-    setInput("");
-    setStart(null);
-    setTimeline([]);
+    setUserInput("");
+    setCurrentWordIndex(0);
+    setStartTime(null);
+    setAccuracyTimeline([]);
   }, [words]);
 
+  // textarea 자동 포커싱
   useEffect(() => {
-    taRef.current?.focus();
+    inputRef.current?.focus();
   }, []);
 
+  // 다음 단어로 넘어가는 처리
   const moveToNextWord = () => {
-    const word = words[curIdx] || "";
-    const updatedTimeline = [
-      ...timeline,
-      ...input.split("").map((c, i) => (c === word[i] ? 1 : 0)) as (0 | 1)[]
-    ];
-    setTimeline(updatedTimeline);
+    const currentWord = words[currentWordIndex] || "";
 
-    const doneChars = words.slice(0, curIdx).join("").length + word.length;
-    setGage((doneChars / words.join("").length) * 100);
+    // 현재 입력과 정답 비교 (글자 단위 정확도)
+    const result = userInput
+      .split("")
+      .map((char, idx) => (char === currentWord[idx] ? 1 : 0)) as (0 | 1)[];
 
-    setInput("");
-    setCurIdx((prev) => prev + 1);
+    const updatedTimeline = [...accuracyTimeline, ...result];
+    setAccuracyTimeline(updatedTimeline);
 
-    if (mode === "initial") {
-      pos < 3 ? setPos((p) => p + 1) : setMode("fixed");
-    }
+    // 게이지 계산
+    const typedLength =
+      words.slice(0, currentWordIndex).join("").length + currentWord.length;
+    const totalLength = words.join("").length;
+    setGage((typedLength / totalLength) * 100);
 
-    if (curIdx + 1 >= words.length && start) {
-      const durationSec = (Date.now() - start) / 1000;
-      const correctChars = updatedTimeline.filter((v) => v === 1).length;
-      const typoCount = updatedTimeline.filter((v) => v === 0).length;
-      const totalTyped = updatedTimeline.length;
-      const accuracyPct = totalTyped ? Math.round((correctChars / totalTyped) * 100) : 0;
-      const wpm = Math.round((words.length / durationSec) * 60 * 5);
+    // 입력 초기화 및 다음 단어 인덱스로 이동
+    setUserInput("");
+    setCurrentWordIndex((prev) => prev + 1);
 
-      localStorage.setItem("typingResult", JSON.stringify({
-        durationSec,
-        wpm,
-        accuracy: accuracyPct,
-        typoCount,
-        accuracyTimeline: updatedTimeline,
-      }));
+    // 모든 단어를 다 입력한 경우 결과 저장
+    if (currentWordIndex + 1 >= words.length && startTime !== null) {
+      const endTime = Date.now();
+      const durationSec = (endTime - startTime) / 1000;
+
+      const correct = updatedTimeline.filter((v) => v === 1).length;
+      const typo = updatedTimeline.filter((v) => v === 0).length;
+      const total = updatedTimeline.length;
+      const accuracy = total ? Math.round((correct / total) * 100) : 0;
+      const wpm = Math.round((words.length * 5 / durationSec) * 60);
+
+      localStorage.setItem(
+        "typingResult",
+        JSON.stringify({
+          durationSec,
+          wpm,
+          accuracy,
+          typoCount: typo,
+          accuracyTimeline: updatedTimeline,
+          savedAt: new Date().toISOString(),
+        })
+      );
 
       router.push("/result");
     }
   };
 
+  // 입력 핸들러
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (isComposing) {
-      setInput(e.target.value);
+      setUserInput(e.target.value);
       return;
     }
 
-    const val = e.target.value;
-    const word = words[curIdx] || "";
+    const value = e.target.value;
+    const currentWord = words[currentWordIndex] || "";
 
-    if (!start && val.length > 0) {
-      setStart(Date.now());
+    // 입력이 시작되면 시작 시간 기록
+    if (!startTime && value.length > 0) {
+      setStartTime(Date.now());
     }
 
-    setInput(val);
+    setUserInput(value);
 
-    // 입력이 정확하든 틀리든 글자 수가 맞으면 다음 단어로 이동
-    if (val.length >= word.length) {
+    // 입력이 단어 길이를 넘으면 자동으로 다음 단어로 이동
+    if (value.length >= currentWord.length) {
       moveToNextWord();
     }
   };
 
+  // 스페이스바로 단어 넘기기
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === " ") {
       e.preventDefault();
@@ -100,18 +112,21 @@ export default function InputWord({ setGage, words }: TypingWordsInputProps) {
     }
   };
 
+  // 클릭 시 입력창 포커싱
+  const handleClick = () => {
+    inputRef.current?.focus();
+  };
+
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-full h-full cursor-text" onClick={handleClick}>
       <TypingWord
         words={words}
-        currentWordIndex={curIdx}
-        currentInput={input}
-        inputMode={mode}
-        inputPosition={pos}
+        currentWordIndex={currentWordIndex}
+        currentInput={userInput}
       />
       <textarea
-        ref={taRef}
-        value={input}
+        ref={inputRef}
+        value={userInput}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         onCompositionStart={() => setIsComposing(true)}
