@@ -1,138 +1,139 @@
 "use client";
-import React, { useEffect, useState } from "react";
+
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import TypingWord from "./TypingWord";
 
 interface TypingWordsInputProps {
   setGage: (value: number) => void;
+  words: string[];
 }
 
-const initialWords: string[] = [
-  "Int",
-  "Char",
-  "Float",
-  "Double",
-  "If",
-  "Else",
-  "For",
-  "Switch",
-  "Return",
-  "Break",
-  "Container",
-  "JavaScript",
-];
+export default function InputWord({ setGage, words }: TypingWordsInputProps) {
+  const [userInput, setUserInput] = useState(""); // 현재 입력 중인 문자열
+  const [currentWordIndex, setCurrentWordIndex] = useState(0); // 현재 입력할 단어 인덱스
+  const [startTime, setStartTime] = useState<number | null>(null); // 시작 시간
+  const [accuracyTimeline, setAccuracyTimeline] = useState<(0 | 1)[]>([]); // 정확도 기록
+  const [isComposing, setIsComposing] = useState(false); // 한글 조합 중 여부
 
-const WORDS_PER_SCREEN = 7;
-const INPUT_WORD_INDEX = 3;
-
-export default function InputWord({ setGage }: TypingWordsInputProps) {
-  const [words, setWords] = useState<string[]>(initialWords);
-  const [currentInput, setCurrentInput] = useState<string>("");
-  const [currentWordIndex, setCurrentWordIndex] = useState<number>(0);
-  const [inputMode, setInputMode] = useState<"initial" | "fixed">("initial");
-  const [inputPosition, setInputPosition] = useState<number>(0);
-  const [startTime, setStartTime] = useState<number | null>(null);
-  const [totalInput, setTotalInput] = useState<string>("");
-
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const router = useRouter();
-  const totalLength = words.join("").length;
-  const currentWord = words[currentWordIndex] ?? "";
 
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (!currentWord) return;
+  // 단어 리스트가 바뀌면 초기화
+  useEffect(() => {
+    setUserInput("");
+    setCurrentWordIndex(0);
+    setStartTime(null);
+    setAccuracyTimeline([]);
+  }, [words]);
 
-    if (e.key === "Backspace") {
-      if (currentInput.length === 0) return;
+  // textarea 자동 포커싱
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
-      const lastIndex = currentInput.length - 1;
-      const typedChar = currentInput[lastIndex];
-      const correctChar = currentWord[lastIndex];
+  // 다음 단어로 넘어가는 처리
+  const moveToNextWord = () => {
+    const currentWord = words[currentWordIndex] || "";
 
-      const isCorrect = typedChar === correctChar;
+    // 현재 입력과 정답 비교 (글자 단위 정확도)
+    const result = userInput
+      .split("")
+      .map((char, idx) => (char === currentWord[idx] ? 1 : 0)) as (0 | 1)[];
 
-      // 정답으로 입력된 문자는 삭제 금지
-      if (isCorrect) return;
+    const updatedTimeline = [...accuracyTimeline, ...result];
+    setAccuracyTimeline(updatedTimeline);
 
-      // 오타는 삭제 허용
-      setCurrentInput((prev) => prev.slice(0, -1));
-      setTotalInput((prev) => prev.slice(0, -1));
-      return;
-    }
+    // 게이지 계산
+    const typedLength =
+      words.slice(0, currentWordIndex).join("").length + currentWord.length;
+    const totalLength = words.join("").length;
+    setGage((typedLength / totalLength) * 100);
 
-    if (e.key.length === 1) {
-      if (!startTime) setStartTime(Date.now());
+    // 입력 초기화 및 다음 단어 인덱스로 이동
+    setUserInput("");
+    setCurrentWordIndex((prev) => prev + 1);
 
-      const nextInput = currentInput + e.key;
-      setCurrentInput(nextInput);
-      setTotalInput((prev) => prev + e.key);
+    // 모든 단어를 다 입력한 경우 결과 저장
+    if (currentWordIndex + 1 >= words.length && startTime !== null) {
+      const endTime = Date.now();
+      const durationSec = (endTime - startTime) / 1000;
 
-      const typedTotal =
-        words.slice(0, currentWordIndex).join("").length + nextInput.length;
-      const percent = (typedTotal / totalLength) * 100;
-      setGage(percent);
+      const correct = updatedTimeline.filter((v) => v === 1).length;
+      const typo = updatedTimeline.filter((v) => v === 0).length;
+      const total = updatedTimeline.length;
+      const accuracy = total ? Math.round((correct / total) * 100) : 0;
+      const wpm = Math.round(((words.length * 5) / durationSec) * 60);
 
-      if (nextInput.length >= currentWord.length) {
-        setCurrentInput("");
-        const nextWordIndex = currentWordIndex + 1;
-        setCurrentWordIndex(nextWordIndex);
+      localStorage.setItem(
+        "typingResult",
+        JSON.stringify({
+          durationSec,
+          wpm,
+          accuracy,
+          typoCount: typo,
+          accuracyTimeline: updatedTimeline,
+          savedAt: new Date().toISOString(),
+        })
+      );
 
-        if (inputMode === "initial") {
-          if (inputPosition < INPUT_WORD_INDEX) {
-            setInputPosition((pos) => pos + 1);
-          } else {
-            setInputMode("fixed");
-          }
-        }
-
-        if (nextWordIndex >= words.length && startTime) {
-          const endTime = Date.now();
-          const durationSec = (endTime - startTime) / 1000;
-          const fullText = words.join("");
-          const userText = totalInput;
-
-          const correctChars = fullText
-            .split("")
-            .filter((c, i) => userText[i] === c).length;
-          const accuracy = Math.round((correctChars / fullText.length) * 100);
-          const wordCount = words.length;
-          const wpm = Math.round((wordCount / durationSec) * 60 * 5);
-          const typoCount = fullText.length - correctChars;
-
-          const accuracyTimeline = fullText
-            .split("")
-            .map((char, i) =>
-              userText[i] === undefined ? null : userText[i] === char ? 1 : 0
-            );
-
-          localStorage.setItem(
-            "typingResult",
-            JSON.stringify({
-              durationSec,
-              wpm,
-              accuracy,
-              typoCount,
-              accuracyTimeline,
-            })
-          );
-
-          router.push("/result");
-        }
-      }
+      router.push("/result");
     }
   };
 
-  useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [currentInput, currentWordIndex, inputMode, inputPosition, totalInput]);
+  // 입력 핸들러
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (isComposing) {
+      setUserInput(e.target.value);
+      return;
+    }
+
+    const value = e.target.value;
+    const currentWord = words[currentWordIndex] || "";
+
+    // 입력이 시작되면 시작 시간 기록
+    if (!startTime && value.length > 0) {
+      setStartTime(Date.now());
+    }
+
+    setUserInput(value);
+
+    // 입력이 단어 길이를 넘으면 자동으로 다음 단어로 이동
+    if (value.length >= currentWord.length) {
+      moveToNextWord();
+    }
+  };
+
+  // 스페이스바로 단어 넘기기
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === " ") {
+      e.preventDefault();
+      moveToNextWord();
+    }
+  };
+
+  // 클릭 시 입력창 포커싱
+  const handleClick = () => {
+    inputRef.current?.focus();
+  };
 
   return (
-    <TypingWord
-      words={words}
-      currentWordIndex={currentWordIndex}
-      currentInput={currentInput}
-      inputMode={inputMode}
-      inputPosition={inputPosition}
-    />
+    <div className="relative w-full h-full cursor-text" onClick={handleClick}>
+      <TypingWord
+        words={words}
+        currentWordIndex={currentWordIndex}
+        currentInput={userInput}
+      />
+      <textarea
+        ref={inputRef}
+        value={userInput}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+        onCompositionStart={() => setIsComposing(true)}
+        onCompositionEnd={() => setIsComposing(false)}
+        className="absolute inset-0 w-full h-full opacity-0 resize-none"
+        autoFocus
+      />
+    </div>
   );
 }
