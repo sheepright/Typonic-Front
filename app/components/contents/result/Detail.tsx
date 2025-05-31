@@ -8,6 +8,7 @@ interface Result {
   wpm: number;
   accuracy: number;
   typoCount: number;
+  totalChars: number;
   savedAt: string;
 }
 
@@ -73,7 +74,7 @@ export default function Detail({ result }: DetailProps) {
         <p>typonic@user error % {result.typoCount}</p>
         <p>typonic@user time % {result.durationSec.toFixed(2)}’s</p>
         <p>typonic@user tier % 스포츠카</p>
-        <p>typonic@user totalCharacters % 50</p>
+        <p>typonic@user totalCharacters % {result.totalChars}</p>
         <p>typonic@user accuracy % {result.accuracy}%</p>
         <p>
           typonic@user % restart (y/n)

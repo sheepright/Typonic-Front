@@ -95,10 +95,10 @@ const MainContent = ({
   }
   if (selected === "커스텀 연습") {
     return (
-      <div className="mt-[225px]">
-        {customMode === "키워드" && <Custom />}
-        {customMode === "복.붙" && <Copy />}
-        {customMode === "파일 첨부" && <File />}
+      <div className="mt-[90px]">
+        {customMode === "키워드" && <Custom setGage={setGage} gage={gage} />}
+        {customMode === "복.붙" && <Copy setGage={setGage} gage={gage} />}
+        {customMode === "파일 첨부" && <File setGage={setGage} gage={gage} />}
       </div>
     );
   }

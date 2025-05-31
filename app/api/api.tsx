@@ -37,10 +37,6 @@ export interface KeywordRequest {
   count: number;
 }
 
-export interface SentenceKeywordRequest {
-  keyword: string;
-}
-
 export interface CodeRequest {
   language: string;
   length: "short" | "middle" | "long";
@@ -54,7 +50,7 @@ export const uploadRanking = async (data: RankingRequest): Promise<void> => {
 };
 
 // 상위 50명 랭킹 조회
-export const getTop50 = async (): Promise<TopUser[]> => {
+export const getTop50 = async (): Promise<string[]> => {
   const res = await api.get("/db/top50");
   return res.data;
 };
@@ -66,14 +62,20 @@ export const getPercentile = async (wpm: number): Promise<number> => {
 };
 
 // 이메일 중복 확인
-export const checkEmailDuplicate = async (
-  email: string
-): Promise<{ exists: boolean }> => {
+export const checkEmailDuplicate = async (email: string): Promise<boolean> => {
   const res = await api.get("/db/email", { params: { email } });
   return res.data;
 };
 
 /* GPT API */
+
+// 코드 예제 생성
+export const generateCodeExample = async (
+  data: CodeRequest
+): Promise<string> => {
+  const res = await api.post("/gpt/code", data);
+  return res.data;
+};
 
 // 단어 예제 생성 (언어 + 개수)
 export const generateWords = async (
@@ -83,26 +85,34 @@ export const generateWords = async (
   return res.data;
 };
 
+// 키워드 기반 문장 생성
+export const generateSentenceKeyword = async (
+  keyword: string
+): Promise<string> => {
+  const res = await api.post("/gpt/sentenceKeyword", { keyword });
+  return res.data;
+};
+
 // 키워드 기반 단어 생성
 export const generateWordKeyword = async (
   data: KeywordRequest
-): Promise<{ words: string[] }> => {
+): Promise<string[]> => {
   const res = await api.post("/gpt/wordKeyword", data);
   return res.data;
 };
 
-// 키워드 기반 문장 생성
-export const generateSentenceKeyword = async (
-  data: SentenceKeywordRequest
-): Promise<{ sentences: string[] }> => {
-  const res = await api.post("/gpt/sentenceKeyword", data);
+// 복.붙 문장 생성
+export const generateCopy = async (copyData: string): Promise<string> => {
+  const res = await api.post("/gpt/copy", { copyData });
   return res.data;
 };
 
-// 코드 예제 생성
-export const generateCodeExample = async (
-  data: CodeRequest
-): Promise<{ code: string }> => {
-  const res = await api.post("/gpt/code", data);
+//파일 첨부 문장 생성
+export const generateFile = async (formData: FormData): Promise<string> => {
+  const res = await api.post("/gpt/extract", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
   return res.data;
 };

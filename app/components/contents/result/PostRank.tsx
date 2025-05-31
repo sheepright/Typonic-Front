@@ -1,12 +1,10 @@
+// PostRank.tsx
+
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import MacOs from "../../layout/MacOs";
-import {
-  getPercentile,
-  uploadRanking,
-  checkEmailDuplicate,
-} from "@/app/api/api";
+import { uploadRanking, checkEmailDuplicate } from "@/app/api/api";
 
 interface AccuracyPoint {
   timeSec: number;
@@ -21,27 +19,14 @@ interface PostRankProps {
     accuracy: number;
     typoCount: number;
     accuracyTimeline: AccuracyPoint[];
+    percentile: number;
     savedAt: string;
   };
 }
 
 export default function PostRank({ result }: PostRankProps) {
-  const [percentile, setPercentile] = useState<number | null>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-
-  useEffect(() => {
-    const fetchPercentile = async () => {
-      try {
-        const res = await getPercentile(result.wpm);
-        setPercentile(res);
-      } catch (error) {
-        console.error("Percentile API error:", error);
-      }
-    };
-
-    fetchPercentile();
-  }, [result.wpm]);
 
   const handleSubmit = async () => {
     if (!name.trim() || !email.trim()) {
@@ -50,10 +35,18 @@ export default function PostRank({ result }: PostRankProps) {
     }
 
     try {
-      const { exists } = await checkEmailDuplicate(email);
-      if (exists) {
-        alert("이미 등록된 이메일입니다.");
-        return;
+      const res = await checkEmailDuplicate(email);
+
+      // 이미 존재하면 사용자에게 업데이트 여부를 물어보는 알림창
+      if (res == true) {
+        const confirmed = confirm(
+          "이미 등록된 이메일입니다. 기록을 업데이트하시겠습니까?"
+        );
+        if (!confirmed) {
+          // 사용자가 취소를 누르면 업로드 중단
+          return;
+        }
+        // 사용자가 확인을 누르면 계속 진행
       }
 
       const postData = {
@@ -71,7 +64,7 @@ export default function PostRank({ result }: PostRankProps) {
       alert("등록 성공!");
     } catch (error) {
       console.error("등록 에러:", error);
-      alert("등록 중 오류 발생!");
+      alert("잠시후 다시 시도해주세요.");
     }
   };
 
@@ -84,10 +77,13 @@ export default function PostRank({ result }: PostRankProps) {
         <div className="w-[470px]">
           <div className="text-[35px] font-paper">타수 : {result.wpm}</div>
           <div className="mt-[5px] ml-[5px] text-[20px] font-paper">
-            상위 : {percentile !== null ? `${percentile}%` : "로딩 중..."}
+            상위 :{" "}
+            {result.percentile !== null
+              ? `${result.percentile}%`
+              : "로딩 중..."}
           </div>
           <div className="ml-[5px] text-[20px] font-paper">
-            Rank. {/*result.tier*/}
+            Rank. {/* result.tier */}
           </div>
           <div>
             <img

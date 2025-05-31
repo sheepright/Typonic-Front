@@ -13,7 +13,7 @@ export default function InputArea({ setGage, fullText }: InputAreaProps) {
   const [userInput, setUserInput] = useState("");
   const [startTime, setStartTime] = useState<number | null>(null);
   const [accuracyTimeline, setAccuracyTimeline] = useState<
-    { timeSec: number; wpm: number; accuracy: number }[]
+    { timeSec: number; wpm: number; accuracy: number; typoCount: number }[]
   >([]);
   const router = useRouter();
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -21,6 +21,7 @@ export default function InputArea({ setGage, fullText }: InputAreaProps) {
   useEffect(() => {
     setUserInput("");
     setStartTime(null);
+    setAccuracyTimeline([]); // fullText가 바뀔 때도 타임라인 초기화!
   }, [fullText]);
 
   useEffect(() => {
@@ -55,12 +56,12 @@ export default function InputArea({ setGage, fullText }: InputAreaProps) {
         const correctChars = value
           .split("")
           .filter((c, i) => c === fullText[i]).length;
+        const typoCount = value.length - correctChars;
 
-        const typedWordCount = value.trim().split(/\s+/).filter(Boolean).length; // 실제 입력한 단어 수
-
+        const typedWordCount = value.trim().split(/\s+/).filter(Boolean).length;
         const currentWpmRaw = (typedWordCount / elapsedSec) * 60;
         const currentWpm = isFinite(currentWpmRaw)
-          ? Math.round(currentWpmRaw)
+          ? Math.round(currentWpmRaw * 5)
           : 0;
 
         const currentAccuracy = Math.round(
@@ -73,6 +74,7 @@ export default function InputArea({ setGage, fullText }: InputAreaProps) {
             timeSec: elapsedSec,
             wpm: currentWpm,
             accuracy: currentAccuracy,
+            typoCount,
           },
         ]);
       }
@@ -84,16 +86,14 @@ export default function InputArea({ setGage, fullText }: InputAreaProps) {
       const correctChars = value
         .split("")
         .filter((c, i) => c === fullText[i]).length;
+      const typoCount = value.length - correctChars;
 
       const typedWordCount = value.trim().split(/\s+/).filter(Boolean).length;
-
       const wpmRaw = (typedWordCount / durationSec) * 60;
-      const wpm = isFinite(wpmRaw) ? Math.round(wpmRaw) : 0;
+      const wpm = isFinite(wpmRaw) ? Math.round(wpmRaw * 5) : 0;
 
       const accuracy = Math.round((correctChars / fullText.length) * 100);
-      const typoCount = fullText.length - correctChars;
 
-      // ✅ 결과를 localStorage에 저장
       localStorage.setItem(
         "typingResult",
         JSON.stringify({
@@ -101,6 +101,7 @@ export default function InputArea({ setGage, fullText }: InputAreaProps) {
           wpm,
           accuracy,
           typoCount,
+          totalChars: fullText.length,
           accuracyTimeline,
           savedAt: new Date().toISOString(),
         })
