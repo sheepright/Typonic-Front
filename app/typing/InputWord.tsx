@@ -50,7 +50,7 @@ export default function InputWord({ setGage, words }: TypingWordsInputProps) {
         .length + 1;
 
     const wpmRaw = (typedWordsCount / durationSec) * 60;
-    const wpm = isFinite(wpmRaw) ? Math.round(wpmRaw) : 0;
+    const wpm = isFinite(wpmRaw) ? Math.round(wpmRaw * 5) : 0;
     const accuracy = Math.round((correctChars / currentWord.length) * 100);
 
     const timelineEntry = {

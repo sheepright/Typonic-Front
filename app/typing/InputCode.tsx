@@ -61,7 +61,7 @@ export default function InputArea({ setGage, fullText }: InputAreaProps) {
         const typedWordCount = value.trim().split(/\s+/).filter(Boolean).length;
         const currentWpmRaw = (typedWordCount / elapsedSec) * 60;
         const currentWpm = isFinite(currentWpmRaw)
-          ? Math.round(currentWpmRaw)
+          ? Math.round(currentWpmRaw * 5)
           : 0;
 
         const currentAccuracy = Math.round(
@@ -90,7 +90,7 @@ export default function InputArea({ setGage, fullText }: InputAreaProps) {
 
       const typedWordCount = value.trim().split(/\s+/).filter(Boolean).length;
       const wpmRaw = (typedWordCount / durationSec) * 60;
-      const wpm = isFinite(wpmRaw) ? Math.round(wpmRaw) : 0;
+      const wpm = isFinite(wpmRaw) ? Math.round(wpmRaw * 5) : 0;
 
       const accuracy = Math.round((correctChars / fullText.length) * 100);
 

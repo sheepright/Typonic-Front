@@ -27,7 +27,7 @@ export default function Chart({ timeline, durationSec }: ChartProps) {
   if (timeline.length === 0) return null;
 
   // 0.5초 이후 데이터만 필터링
-  const filteredTimeline = timeline.filter((point) => point.timeSec >= 0.5);
+  const filteredTimeline = timeline.filter((point) => point.timeSec >= 1);
 
   const CustomTooltip = ({
     active,
@@ -95,7 +95,13 @@ export default function Chart({ timeline, durationSec }: ChartProps) {
           />
 
           <Tooltip content={<CustomTooltip />} />
-          <Legend />
+          <Legend
+            verticalAlign="bottom"
+            align="left"
+            wrapperStyle={{
+              marginLeft: "60px", // 40px만큼 오른쪽으로 이동
+            }}
+          />
 
           <Area
             yAxisId="left"
