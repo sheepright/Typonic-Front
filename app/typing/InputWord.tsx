@@ -10,16 +10,17 @@ interface TypingWordsInputProps {
 }
 
 export default function InputWord({ setGage, words }: TypingWordsInputProps) {
-  const [userInput, setUserInput] = useState(""); // 현재 입력 중인 문자열
-  const [currentWordIndex, setCurrentWordIndex] = useState(0); // 현재 입력할 단어 인덱스
-  const [startTime, setStartTime] = useState<number | null>(null); // 시작 시간
-  const [accuracyTimeline, setAccuracyTimeline] = useState<(0 | 1)[]>([]); // 정확도 기록
-  const [isComposing, setIsComposing] = useState(false); // 한글 조합 중 여부
+  const [userInput, setUserInput] = useState("");
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [startTime, setStartTime] = useState<number | null>(null);
+  const [accuracyTimeline, setAccuracyTimeline] = useState<
+    { timeSec: number; wpm: number; accuracy: number; typoCount: number }[]
+  >([]);
+  const [isComposing, setIsComposing] = useState(false);
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const router = useRouter();
 
-  // 단어 리스트가 바뀌면 초기화
   useEffect(() => {
     setUserInput("");
     setCurrentWordIndex(0);
@@ -27,44 +28,42 @@ export default function InputWord({ setGage, words }: TypingWordsInputProps) {
     setAccuracyTimeline([]);
   }, [words]);
 
-  // textarea 자동 포커싱
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
 
-  // 다음 단어로 넘어가는 처리
-  const moveToNextWord = () => {
+  const moveToNextWord = (finalInput: string) => {
     const currentWord = words[currentWordIndex] || "";
-
-    // 현재 입력과 정답 비교 (글자 단위 정확도)
-    const result = userInput
+    const correctChars = finalInput
       .split("")
-      .map((char, idx) => (char === currentWord[idx] ? 1 : 0)) as (0 | 1)[];
+      .filter((c, i) => c === currentWord[i]).length;
+    const typo = finalInput.length - correctChars;
 
-    const updatedTimeline = [...accuracyTimeline, ...result];
+    const typedLength =
+      words.slice(0, currentWordIndex).join(" ").length + currentWord.length;
+    const totalLength = words.join(" ").length;
+
+    const endTime = Date.now();
+    const durationSec = startTime !== null ? (endTime - startTime) / 1000 : 0;
+    const typedWordsCount =
+      words.slice(0, currentWordIndex).join(" ").split(/\s+/).filter(Boolean)
+        .length + 1;
+
+    const wpmRaw = (typedWordsCount / durationSec) * 60;
+    const wpm = isFinite(wpmRaw) ? Math.round(wpmRaw) : 0;
+    const accuracy = Math.round((correctChars / currentWord.length) * 100);
+
+    const timelineEntry = {
+      timeSec: durationSec,
+      wpm,
+      accuracy,
+      typoCount: typo,
+    };
+
+    const updatedTimeline = [...accuracyTimeline, timelineEntry];
     setAccuracyTimeline(updatedTimeline);
 
-    // 게이지 계산
-    const typedLength =
-      words.slice(0, currentWordIndex).join("").length + currentWord.length;
-    const totalLength = words.join("").length;
-    setGage((typedLength / totalLength) * 100);
-
-    // 입력 초기화 및 다음 단어 인덱스로 이동
-    setUserInput("");
-    setCurrentWordIndex((prev) => prev + 1);
-
-    // 모든 단어를 다 입력한 경우 결과 저장
-    if (currentWordIndex + 1 >= words.length && startTime !== null) {
-      const endTime = Date.now();
-      const durationSec = (endTime - startTime) / 1000;
-
-      const correct = updatedTimeline.filter((v) => v === 1).length;
-      const typo = updatedTimeline.filter((v) => v === 0).length;
-      const total = updatedTimeline.length;
-      const accuracy = total ? Math.round((correct / total) * 100) : 0;
-      const wpm = Math.round(((words.length * 5) / durationSec) * 60);
-
+    if (currentWordIndex + 1 >= words.length) {
       localStorage.setItem(
         "typingResult",
         JSON.stringify({
@@ -72,47 +71,65 @@ export default function InputWord({ setGage, words }: TypingWordsInputProps) {
           wpm,
           accuracy,
           typoCount: typo,
+          totalChars: totalLength,
           accuracyTimeline: updatedTimeline,
           savedAt: new Date().toISOString(),
         })
       );
-
       router.push("/result");
+    } else {
+      setUserInput("");
+      setCurrentWordIndex((prev) => prev + 1);
     }
   };
 
-  // 입력 핸들러
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (isComposing) {
-      setUserInput(e.target.value);
-      return;
-    }
-
     const value = e.target.value;
     const currentWord = words[currentWordIndex] || "";
 
-    // 입력이 시작되면 시작 시간 기록
     if (!startTime && value.length > 0) {
       setStartTime(Date.now());
     }
 
-    setUserInput(value);
+    // 단어 길이만큼만 입력 허용
+    const finalValue = value.slice(0, currentWord.length);
+    setUserInput(finalValue);
 
-    // 입력이 단어 길이를 넘으면 자동으로 다음 단어로 이동
-    if (value.length >= currentWord.length) {
-      moveToNextWord();
+    // 게이지 업데이트
+    const typedChars =
+      words.slice(0, currentWordIndex).join(" ").length + finalValue.length;
+    const totalLength = words.join(" ").length;
+    setGage((typedChars / totalLength) * 100);
+
+    // 한글/영문 상관없이, 조합 중 아니고 단어 완성되면 다음으로 이동
+    if (!isComposing && finalValue === currentWord) {
+      moveToNextWord(finalValue);
     }
   };
 
-  // 스페이스바로 단어 넘기기
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === " ") {
-      e.preventDefault();
-      moveToNextWord();
+  const handleCompositionEnd = (
+    e: React.CompositionEvent<HTMLTextAreaElement>
+  ) => {
+    setIsComposing(false);
+    const value = e.currentTarget.value;
+    const currentWord = words[currentWordIndex] || "";
+
+    // 단어 길이만큼만 입력 허용
+    const finalValue = value.slice(0, currentWord.length);
+    setUserInput(finalValue);
+
+    // 게이지 업데이트
+    const typedChars =
+      words.slice(0, currentWordIndex).join(" ").length + finalValue.length;
+    const totalLength = words.join(" ").length;
+    setGage((typedChars / totalLength) * 100);
+
+    // 한글 입력 완성 후 단어가 완성되면 다음으로 이동
+    if (finalValue === currentWord) {
+      moveToNextWord(finalValue);
     }
   };
 
-  // 클릭 시 입력창 포커싱
   const handleClick = () => {
     inputRef.current?.focus();
   };
@@ -128,9 +145,8 @@ export default function InputWord({ setGage, words }: TypingWordsInputProps) {
         ref={inputRef}
         value={userInput}
         onChange={handleChange}
-        onKeyDown={handleKeyDown}
         onCompositionStart={() => setIsComposing(true)}
-        onCompositionEnd={() => setIsComposing(false)}
+        onCompositionEnd={handleCompositionEnd}
         className="absolute inset-0 w-full h-full opacity-0 resize-none"
         autoFocus
       />

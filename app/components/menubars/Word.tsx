@@ -36,6 +36,7 @@ export default function WordMenubar() {
 
     const fetch = async () => {
       try {
+        alert("잠시만 기다려주세요, 최대 1분까지 소요될 수 있습니다.");
         const res = await generateWords({
           language: selectedLanguage,
           count: getCount(selectedCount),

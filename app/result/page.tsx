@@ -1,5 +1,3 @@
-// ResultPage.tsx
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -18,6 +16,7 @@ interface AccuracyPoint {
   timeSec: number;
   wpm: number;
   accuracy: number;
+  typoCount: number;
 }
 
 interface Result {
@@ -25,6 +24,7 @@ interface Result {
   wpm: number;
   accuracy: number;
   typoCount: number;
+  totalChars: number;
   accuracyTimeline: AccuracyPoint[];
   percentile: number;
   savedAt: string;
@@ -84,15 +84,22 @@ export default function ResultPage() {
       case "그래프":
         return (
           <div className="mt-[15px]">
-            <div className="w-[900px] bg-[#2C2E31] rounded-[5px]">
+            <>
               <MacOs styleType="type1" />
-              <div className="p-4">
-                <Chart
-                  timeline={result.accuracyTimeline}
-                  durationSec={result.durationSec}
-                />
+              <div className="w-[900px] shadow-lg bg-cdark p-4">
+                <div className="ml-[-50px] font-paper">
+                  <Chart
+                    timeline={result.accuracyTimeline.map((p) => ({
+                      timeSec: p.timeSec,
+                      wpm: p.wpm,
+                      accuracy: p.accuracy,
+                      typoCount: p.typoCount,
+                    }))}
+                    durationSec={result.durationSec}
+                  />
+                </div>
               </div>
-            </div>
+            </>
           </div>
         );
       case "랭킹 등록":

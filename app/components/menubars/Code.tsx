@@ -30,6 +30,7 @@ export default function CodeMenubar() {
 
     const fetch = async () => {
       try {
+        alert("잠시만 기다려주세요, 최대 1분까지 소요될 수 있습니다.");
         const res = await generateCodeExample({
           language: selectedLanguage,
           length: selectedLength.toLowerCase() as "short" | "middle" | "long",

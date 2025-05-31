@@ -89,7 +89,7 @@ export const generateWords = async (
 export const generateSentenceKeyword = async (
   keyword: string
 ): Promise<string> => {
-  const res = await api.post("/gpt/sentenceKeyword", keyword);
+  const res = await api.post("/gpt/sentenceKeyword", { keyword });
   return res.data;
 };
 
@@ -103,12 +103,16 @@ export const generateWordKeyword = async (
 
 // 복.붙 문장 생성
 export const generateCopy = async (copyData: string): Promise<string> => {
-  const res = await api.post("/gpt/copy", copyData);
+  const res = await api.post("/gpt/copy", { copyData });
   return res.data;
 };
 
 //파일 첨부 문장 생성
-export const generateFile = async (file: string): Promise<string> => {
-  const res = await api.post("/gpt/extract", file);
+export const generateFile = async (formData: FormData): Promise<string> => {
+  const res = await api.post("/gpt/extract", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
   return res.data;
 };

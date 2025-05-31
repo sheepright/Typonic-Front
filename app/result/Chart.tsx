@@ -2,62 +2,138 @@
 
 import React from "react";
 import {
-  LineChart,
-  Line,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
   Tooltip,
   ResponsiveContainer,
+  Legend,
 } from "recharts";
 
-interface AccuracyPoint {
+interface ChartPoint {
   timeSec: number;
   wpm: number;
+  typoCount: number;
   accuracy: number;
 }
 
 interface ChartProps {
-  timeline: AccuracyPoint[];
+  timeline: ChartPoint[];
   durationSec: number;
 }
 
-export default function Chart({ timeline = [], durationSec }: ChartProps) {
+export default function Chart({ timeline, durationSec }: ChartProps) {
   if (timeline.length === 0) return null;
 
-  const maxTypingSpeed = Math.max(...timeline.map((p) => p.wpm), 100);
+  // 0.5초 이후 데이터만 필터링
+  const filteredTimeline = timeline.filter((point) => point.timeSec >= 0.5);
 
-  const data = timeline.map((point) => ({
-    time: point.timeSec,
-    typingSpeed: point.wpm,
-  }));
+  const CustomTooltip = ({
+    active,
+    payload,
+    label,
+  }: {
+    active?: boolean;
+    payload?: any;
+    label?: string | number;
+  }) => {
+    if (active && payload && payload.length > 0) {
+      const { wpm, accuracy, typoCount } = payload[0].payload;
+
+      // 시간 값을 소수점 첫째자리까지만 표시
+      const formattedLabel =
+        typeof label === "number" ? label.toFixed(1) : label;
+
+      return (
+        <div className="bg-[#333] text-white p-2 rounded text-[14px] space-y-1">
+          <p>시간: {formattedLabel} 초</p>
+          <p>
+            <span
+              className="inline-block w-3 h-3 rounded-full mr-1"
+              style={{ backgroundColor: "#A1E3D8" }}
+            ></span>
+            WPM: {wpm}
+          </p>
+          <p>
+            <span
+              className="inline-block w-3 h-3 rounded-full mr-1"
+              style={{ backgroundColor: "#FFD972" }}
+            ></span>
+            정확도: {accuracy}%
+          </p>
+          <p>
+            <span
+              className="inline-block w-3 h-3 rounded-full mr-1"
+              style={{ backgroundColor: "#FF9F9F" }}
+            ></span>
+            오타: {typoCount} 개
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
-    <div className="mt-8 bg-[#2C2E31] p-4 rounded">
+    <div className="relative">
       <ResponsiveContainer width="100%" height={320}>
-        <LineChart data={data}>
+        <AreaChart data={filteredTimeline}>
           <XAxis
-            type="number"
-            dataKey="time"
-            domain={[0, durationSec]}
-            label={{ value: "시간 (초)", position: "insideBottom", offset: -5 }}
-            tick={{ fill: "#ffffff" }}
+            dataKey="timeSec"
+            tick={false}
+            label={undefined}
+            stroke="#ffffff6e"
+            strokeWidth={2}
           />
           <YAxis
-            type="number"
-            domain={[0, maxTypingSpeed]}
-            label={{ value: "타수 (wpm)", angle: -90, position: "insideLeft" }}
-            tick={{ fill: "#ffffff" }}
+            yAxisId="left"
+            tick={false}
+            label={undefined}
+            stroke="#ffffff6e"
+            strokeWidth={2}
           />
-          <Tooltip formatter={(value: any) => `${value}`} />
-          <Line
+
+          <Tooltip content={<CustomTooltip />} />
+          <Legend />
+
+          <Area
+            yAxisId="left"
             type="monotone"
-            dataKey="typingSpeed"
-            stroke="#565656"
-            dot={false}
+            dataKey="wpm"
+            stroke="#A1E3D8"
+            strokeWidth={2}
+            fill="#A1E3D8"
+            fillOpacity={0.2}
             name="타수"
           />
-        </LineChart>
+          <Area
+            yAxisId="left"
+            type="monotone"
+            dataKey="typoCount"
+            stroke="#FF9F9F"
+            strokeWidth={2}
+            fill="#FF9F9F"
+            fillOpacity={0.2}
+            name="오타"
+          />
+          <Area
+            yAxisId="left"
+            type="monotone"
+            dataKey="accuracy"
+            stroke="#FFD972"
+            strokeWidth={2}
+            fill="#FFD972"
+            fillOpacity={0.2}
+            name="정확도"
+          />
+        </AreaChart>
       </ResponsiveContainer>
+
+      {/* 오른쪽 아래 "타수 / 시간" 레이블 */}
+      <div className="absolute bottom-1 right-2 text-white text-[16px] font-bold">
+        타수 / 시간
+      </div>
     </div>
   );
 }
