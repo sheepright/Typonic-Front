@@ -13,15 +13,22 @@ export default function WordMenubar() {
   // 메뉴에 표시할 항목들
   const menu = [
     "코드 단어 연습", // 항상 선택 상태 유지
-    "Line",           // 구분선
-    "C++", "C#", "Java", "Python", "Html", "JavaScript", "TypeScript", // 언어들
-    "Line",           // 구분선
-    "10개", "25개", "50개", // 단어 수
+    "Line", // 구분선
+    "C++",
+    "C#",
+    "Java",
+    "Python",
+    "Html",
+    "JavaScript",
+    "TypeScript", // 언어들
+    "Line", // 구분선
+    "10개",
+    "25개",
+    "50개", // 단어 수
   ];
 
   // 문자열에서 숫자만 추출 (예: "25개" → 25)
-  const getCount = (label: string): number =>
-    parseInt(label.replace("개", ""));
+  const getCount = (label: string): number => parseInt(label.replace("개", ""));
 
   // 언어 또는 단어 개수 선택 시 단어를 새로 생성
   useEffect(() => {
@@ -29,6 +36,7 @@ export default function WordMenubar() {
 
     const fetch = async () => {
       try {
+        alert("잠시만 기다려주세요, 최대 1분까지 소요될 수 있습니다.");
         const res = await generateWords({
           language: selectedLanguage,
           count: getCount(selectedCount),
@@ -37,8 +45,6 @@ export default function WordMenubar() {
         // localStorage에 결과 저장
         localStorage.setItem("typingWords", JSON.stringify(res));
         localStorage.setItem("wordsVersion", version);
-
-        console.log("📦 저장된 단어:", res);
       } catch (err) {
         console.error("단어 가져오기 실패:", err);
       }

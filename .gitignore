@@ -39,4 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# key value, setting
 next.config.ts
+
+#memo
+problem.md

@@ -17,9 +17,13 @@ export default function TestPage() {
   const [keywordCount, setKeywordCount] = useState(5);
   const [keywordResult, setKeywordResult] = useState<string[] | string>("");
 
+  // ✅ 파일 업로드
+  const [file, setFile] = useState<File | null>(null);
+  const [fileResult, setFileResult] = useState("");
+
   const handleCodeSubmit = async () => {
     try {
-      const res = await axios.post("http://localhost:8080/api/code", {
+      const res = await axios.post("http://localhost:8080/gpt/code", {
         language,
         length,
       });
@@ -31,7 +35,7 @@ export default function TestPage() {
 
   const handleWordSubmit = async () => {
     try {
-      const res = await axios.post("http://localhost:8080/api/words", {
+      const res = await axios.post("http://localhost:8080/gpt/words", {
         language,
         count,
       });
@@ -45,8 +49,8 @@ export default function TestPage() {
     try {
       const url =
         keywordType === "word"
-          ? "http://localhost:8080/api/wordKeyword"
-          : "http://localhost:8080/api/sentenceKeyword";
+          ? "http://localhost:8080/gpt/wordKeyword"
+          : "http://localhost:8080/gpt/sentenceKeyword";
 
       const payload =
         keywordType === "word" ? { keyword, count: keywordCount } : { keyword };
@@ -58,11 +62,35 @@ export default function TestPage() {
     }
   };
 
+  // ✅ 파일 업로드 후 전송
+  const handleFileUpload = async () => {
+    if (!file) {
+      alert("먼저 파일을 선택해주세요!");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const res = await axios.post(
+        "http://localhost:8080/gpt/extract",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      setFileResult(res.data);
+    } catch (err) {
+      console.error("❌ 파일 업로드 요청 실패", err);
+    }
+  };
+
   return (
     <div className="p-8 space-y-8">
       <h1 className="text-xl font-bold">🔥 GPT 코드 생성 테스트</h1>
 
-      {/* 언어 선택 */}
+      {/* ✅ 언어 선택 */}
       <div className="space-x-2">
         {["Java", "C", "C#"].map((lang) => (
           <button
@@ -77,7 +105,7 @@ export default function TestPage() {
         ))}
       </div>
 
-      {/* 코드 길이 선택 */}
+      {/* ✅ 코드 길이 선택 */}
       <div className="space-x-2">
         {["short", "middle", "long"].map((len) => (
           <button
@@ -92,7 +120,7 @@ export default function TestPage() {
         ))}
       </div>
 
-      {/* 단어 개수 선택 */}
+      {/* ✅ 단어 개수 선택 */}
       <div className="space-x-2">
         {[5, 10, 20].map((num) => (
           <button
@@ -107,7 +135,7 @@ export default function TestPage() {
         ))}
       </div>
 
-      {/* 요청 버튼 */}
+      {/* ✅ 요청 버튼 */}
       <div className="space-x-4">
         <button
           onClick={handleCodeSubmit}
@@ -123,7 +151,7 @@ export default function TestPage() {
         </button>
       </div>
 
-      {/* 결과 출력 */}
+      {/* ✅ 결과 출력 */}
       <div>
         <h2 className="text-lg font-semibold">✅ 코드 예제 결과</h2>
         <pre className="p-4 whitespace-pre-wrap bg-black rounded">
@@ -191,6 +219,34 @@ export default function TestPage() {
               ))}
             </ul>
           )}
+        </div>
+      </div>
+
+      {/* 🚀 파일 업로드 테스트 */}
+      <div className="border-t pt-6">
+        <h2 className="text-lg font-bold mb-2">📂 파일 업로드 테스트</h2>
+
+        {/* 파일 선택 */}
+        <input
+          type="file"
+          accept=".pdf,.docx"
+          onChange={(e) => setFile(e.target.files?.[0] || null)}
+          className="border p-2 rounded mr-2"
+        />
+
+        {/* 전송 버튼 */}
+        <button
+          onClick={handleFileUpload}
+          className="px-4 py-2 bg-blue-500 text-white rounded"
+        >
+          업로드 및 전송
+        </button>
+
+        <div className="mt-4">
+          <h3 className="font-semibold">✅ 업로드 결과</h3>
+          <pre className="p-4 whitespace-pre-wrap bg-black rounded">
+            {fileResult}
+          </pre>
         </div>
       </div>
     </div>

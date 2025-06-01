@@ -3,13 +3,13 @@ import React from "react";
 
 // 컴포넌트에서 전달받을 props 타입 정의
 interface TypingWordsDisplayProps {
-  words: string[];             // 전체 단어 배열
-  currentWordIndex: number;    // 현재 입력 중인 단어의 인덱스
-  currentInput: string;        // 사용자가 입력한 문자열 (현재 단어 기준)
+  words: string[]; // 전체 단어 배열
+  currentWordIndex: number; // 현재 입력 중인 단어의 인덱스
+  currentInput: string; // 사용자가 입력한 문자열 (현재 단어 기준)
 }
 
-const WORDS_PER_SCREEN = 7;     // 한 화면에 보여줄 단어 수
-const FIXED_INPUT_INDEX = 3;    // 입력창이 고정될 위치 (4번째 단어 자리)
+const WORDS_PER_SCREEN = 7; // 한 화면에 보여줄 단어 수
+const FIXED_INPUT_INDEX = 3; // 입력창이 고정될 위치 (4번째 단어 자리)
 
 const TypingWord: React.FC<TypingWordsDisplayProps> = ({
   words,
@@ -33,9 +33,7 @@ const TypingWord: React.FC<TypingWordsDisplayProps> = ({
 
   // 4. 현재 단어의 입력 위치 계산 (고정 또는 가변)
   const inputBoxIndex =
-    currentWordIndex < FIXED_INPUT_INDEX
-      ? currentWordIndex
-      : FIXED_INPUT_INDEX;
+    currentWordIndex < FIXED_INPUT_INDEX ? currentWordIndex : FIXED_INPUT_INDEX;
 
   return (
     <div className="w-full flex justify-center mt-6">

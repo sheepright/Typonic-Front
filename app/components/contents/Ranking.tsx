@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { getTop50 } from "@/app/api/api";
 
 interface RankingItem {
-  username: string;
-  vpm: number;
+  name: string;
+  wpm: number;
   time: string;
   accuracy: string;
   date: string;
@@ -13,16 +14,35 @@ interface RankingItem {
 export default function Ranking() {
   const [rankingList, setRankingList] = useState<RankingItem[]>([]);
 
-  // 더미 데이터 생성 (50개) -> 나중에 랭킹 DB API로 대체
   useEffect(() => {
-    const dummyData = Array.from({ length: 50 }, (_, i) => ({
-      username: `User${i + 1}`,
-      vpm: Math.floor(Math.random() * 400),
-      time: `${Math.floor(Math.random() * 60)}s`,
-      accuracy: `${(Math.random() * 100).toFixed(2)}%`,
-      date: `2025-05-${String((i % 30) + 1).padStart(2, "0")}`,
-    }));
-    setRankingList(dummyData);
+    const fetchRanking = async () => {
+      try {
+        const data = await getTop50();
+        const parsedData = data.map((item: any, i: number) => {
+          // 날짜 데이터 가공
+          const dateObj = new Date(item.date);
+          const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+          const day = String(dateObj.getDate()).padStart(2, "0");
+          const hours = String(dateObj.getHours()).padStart(2, "0");
+          const minutes = String(dateObj.getMinutes()).padStart(2, "0");
+          const formattedDate = `${month}/${day} ${hours}:${minutes}`;
+
+          return {
+            name: item.name,
+            wpm: item.wpm,
+            time: `${parseFloat(item.time).toFixed(1)}'s`,
+            accuracy: `${item.accuracy.toFixed(1)} %`,
+            date: formattedDate,
+          };
+        });
+
+        setRankingList(parsedData);
+      } catch (err) {
+        console.error("랭킹 데이터 불러오기 실패:", err);
+      }
+    };
+
+    fetchRanking();
   }, []);
 
   return (
@@ -30,51 +50,50 @@ export default function Ranking() {
       {/* 헤더 */}
       <div className="flex h-[35px] bg-cdark text-[18px]">
         <div className="w-[50px] flex items-center justify-center">#</div>
-        <div className="w-[340px] flex items-center pl-1">user . Name</div>
+        <div className="w-[340px] flex items-center pl-1">user.Name</div>
         <div className="w-[100px] flex items-center justify-center">wpm</div>
         <div className="w-[100px] flex items-center justify-center">Time</div>
         <div className="w-[160px] flex items-center justify-center">
           Accuracy
         </div>
-        <div className="w-[190px] flex items-center justify-center">Date</div>
+        <div className="w-[160px] flex items-center justify-center">Date</div>
       </div>
 
       {/* 스크롤 */}
       <div className="overflow-y-auto h-[544px] scrollbar-hide">
         {rankingList.map((item, index) => {
-          // 등수에 따라 텍스트 색상 결정
           const rankColor =
             index === 0
-              ? "text-[#FFD700]" // 금
+              ? "text-[#FFD700]"
               : index === 1
-              ? "text-[#C0C0C0]" // 은
+              ? "text-[#C0C0C0]"
               : index === 2
-              ? "text-[#CD7F32]" // 동
-              : "text-white"; // 나머진 흰색
+              ? "text-[#CD7F32]"
+              : "text-white";
 
           return (
             <div
               key={index}
               className={`flex h-[35px] ${
-                index % 2 === 0 ? "bg-[#323437]" : "bg-[#2A2C2E]"
+                index % 2 === 0 ? "bg-root" : "bg-cdark"
               } text-[18px] ${rankColor}`}
             >
               <div className="w-[50px] flex items-center justify-center">
                 {index + 1}
               </div>
-              <div className="w-[340px] flex items-center pl-8">
-                {item.username}
+              <div className="w-[340px] flex items-center pl-1">
+                {item.name}
               </div>
               <div className="w-[100px] flex items-center justify-center">
-                {item.vpm}
+                {item.wpm}
               </div>
-              <div className="w-[100px] flex items-center justify-center">
+              <div className="w-[100px] flex items-center justify-center pl-1">
                 {item.time}
               </div>
               <div className="w-[160px] flex items-center justify-center">
                 {item.accuracy}
               </div>
-              <div className="w-[190px] flex items-center justify-center">
+              <div className="w-[160px] flex items-center justify-center">
                 {item.date}
               </div>
             </div>

@@ -47,7 +47,7 @@ export default function Word({ setGage }: WordProps) {
   }, []);
 
   return (
-    <div className="w-[900px] h-auto bg-cdark rounded-br-[5px] rounded-bl-[5px] pb-[10px] shadow-lg">
+    <div className="w-[900px] h-auto bg-root pb-[10px]">
       <InputWord setGage={setGage} words={words} />
     </div>
   );
