@@ -45,8 +45,6 @@ export default function WordMenubar() {
         // localStorage에 결과 저장
         localStorage.setItem("typingWords", JSON.stringify(res));
         localStorage.setItem("wordsVersion", version);
-
-        console.log("📦 저장된 단어:", res);
       } catch (err) {
         console.error("단어 가져오기 실패:", err);
       }

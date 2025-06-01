@@ -47,7 +47,12 @@ export default function Main({
           keyword: userInput,
           count: parseInt(subOption.replace("개", ""), 10),
         });
-        setWords(generatedWords);
+
+        const cleanedWords = generatedWords.map((word) =>
+          word.trim().replace(/[`~]/g, "")
+        );
+
+        setWords(cleanedWords);
       } else {
         // 문장 모드
         const generatedText = await generateSentenceKeyword(userInput);
