@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Chart from "./Chart";
+import Chart from "../components/contents/result/Chart";
 import ResultMenubar from "../components/menubars/Result";
 import Tier from "../components/contents/result/Tier";
 import Detail from "../components/contents/result/Detail";

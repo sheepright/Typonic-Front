@@ -1,36 +1,28 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+![TyponicLogo](/public/images/readme/Title.png)
 
-## Getting Started
+[![React](https://img.shields.io/badge/React-18.2-blue?logo=react&logoColor=white&style=flat)](https://react.dev/)
+[![Next.js](https://img.shields.io/badge/Next.js-14.0-black?logo=next.js&logoColor=white&style=flat)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue?logo=typescript&logoColor=white&style=flat)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-blue?logo=tailwindcss&logoColor=white&style=flat)](https://tailwindcss.com/)
+[![Axios](https://img.shields.io/badge/Axios-1.6-blue?logo=axios&logoColor=white&style=flat)](https://axios-http.com/)
 
-First, run the development server:
+### [➡️ GitHub_BackPage](https://github.com/sheepright/Typonic-Back)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚢 다양한 컨텐츠의 타자연습 사이트
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- `C+, C#, Java, Python, JavaScript 등`의 다양한 언어의 코드 연습 및 단어 연습 제공.
+- `원하는 카테고리 입력` 자신이 원하는 커스텀 타자 연습도 제공.
+- `문장 붙여넣기, 파일 첨부 등` 다른 문서를 참고해서 연습하는 서비스도 제공.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🐋 깔끔하고 안정적인 UI/UX 구현
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `코드 에디터와 같은 UI 구현` 으로 코드 연습 등을 진행할 때 좀 더 몰입감을 제공.
+- `각진 X, 둥근 O` 둥글둥글한 디자인으로 사용자에겐 편안함 제공.
+- `어두운 색상의 배경` 을 통하여 사용자가 시각적으로 피로도를 감소.
+- `다양한 폰트들` 을 사용하여 사용자에게 다양한 경험을 제공.
 
-## Learn More
+## 🔠 단축키 제공
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `사용자 편의를 위한 단축키 세팅` 을 제공하여 사용자가 더 편리하게 서비스를 이용하도록 제공.
+- `R + Enter` : 재시작
+- `Ctrl + Delete` : 초기 화면
