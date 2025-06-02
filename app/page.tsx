@@ -68,66 +68,68 @@ const MainContent = ({
   setGage: (val: number) => void;
   customMode: string;
 }) => {
-  if (selected === "코드 연습") {
-    return (
-      <>
-        <div className="mt-[90px]">
-          <Gagebar gage={gage} />
-        </div>
-        <div className="mt-[15px]">
-          <MacOs styleType="type1" />
-        </div>
-        <Code setGage={setGage} />
-      </>
-    );
-  }
-  if (selected === "코드 단어 연습") {
-    return (
-      <>
-        <div className="mt-[200px]">
-          <Gagebar gage={gage} />
-        </div>
-        <div className="mt-[30px]">
-          <Word setGage={setGage} />
-        </div>
-      </>
-    );
-  }
-  if (selected === "커스텀 연습") {
-    return (
-      <div className="mt-[90px]">
-        {customMode === "키워드" && <Custom setGage={setGage} gage={gage} />}
-        {customMode === "복.붙" && <Copy setGage={setGage} gage={gage} />}
-        {customMode === "파일 첨부" && <File setGage={setGage} gage={gage} />}
-      </div>
-    );
-  }
-  if (selected === "전체 랭킹") {
-    return (
-      <div className="mt-[50px]">
-        <Raking />
-      </div>
-    );
-  }
-  if (selected === "가이드") {
-    return (
-      <div className="mt-[100px]">
-        <Guide />
-      </div>
-    );
-  }
+  switch (selected) {
+    case "코드 연습":
+      return (
+        <>
+          <div className="mt-[90px]">
+            <Gagebar gage={gage} />
+          </div>
+          <div className="mt-[15px]">
+            <MacOs styleType="type1" />
+          </div>
+          <Code setGage={setGage} />
+        </>
+      );
 
-  return (
-    <>
-      <div className="mt-[90px]">
-        <Gagebar gage={gage} />
-      </div>
-      <div className="mt-[15px]">
-        <MacOs styleType="type1" />
-      </div>
-      <MainCode setGage={setGage} />
-    </>
-  );
+    case "코드 단어 연습":
+      return (
+        <>
+          <div className="mt-[200px]">
+            <Gagebar gage={gage} />
+          </div>
+          <div className="mt-[30px]">
+            <Word setGage={setGage} />
+          </div>
+        </>
+      );
+
+    case "커스텀 연습":
+      return (
+        <div className="mt-[165px]">
+          {customMode === "키워드" && <Custom setGage={setGage} gage={gage} />}
+          {customMode === "복.붙" && <Copy setGage={setGage} gage={gage} />}
+          {customMode === "파일 첨부" && <File setGage={setGage} gage={gage} />}
+        </div>
+      );
+
+    case "전체 랭킹":
+      return (
+        <div className="mt-[50px]">
+          <Raking />
+        </div>
+      );
+
+    case "가이드":
+      return (
+        <div className="mt-[100px]">
+          <Guide />
+        </div>
+      );
+
+    default:
+      return (
+        <>
+          <div className="mt-[90px]">
+            <Gagebar gage={gage} />
+          </div>
+          <div className="mt-[15px]">
+            <MacOs styleType="type1" />
+          </div>
+          <MainCode setGage={setGage} />
+        </>
+      );
+  }
 };
 
 // 전체 페이지
@@ -137,10 +139,10 @@ export default function Main() {
   const [customMode, setCustomMode] = useState<string>("키워드");
 
   return (
-    <div className="w-full h-screen flex justify-center items-start">
+    <div className="w-full h-screen flex justify-center">
       <div className="w-full max-w-[1440px] h-full max-h-[1024px] flex flex-col justify-between">
         <div className="flex flex-col flex-grow items-center">
-          <Header onClick={() => setSelected(null)} />
+          <Header />
           <div className="mt-[10px]">
             <DynamicMenubar
               selected={selected}

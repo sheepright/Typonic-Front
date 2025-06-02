@@ -2,13 +2,11 @@
 
 export default function Footer() {
   return (
-    <footer className="mb-[15px]">
-      <div className="flex justify-center">
-        <div className="font-salad text-[15px]">
-          Made By : 안양우, 김건우, 전주현, 양민재 E-Mail : typonic.typingTest
+    <footer className="flex justify-center py-2">
+      <p className="font-salad text-[15px]">
+        Made By : 안양우, 김건우, 전주현, 양민재 E-Mail : typonic.typingTest
           Gmail.com
-        </div>
-      </div>
+      </p>
     </footer>
   );
 }

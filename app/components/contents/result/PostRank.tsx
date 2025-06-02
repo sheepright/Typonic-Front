@@ -5,6 +5,7 @@
 import { useState } from "react";
 import MacOs from "../../layout/MacOs";
 import { uploadRanking, checkEmailDuplicate } from "@/app/api/api";
+import { getTierInfo } from "../../utils/getTierInfo";
 
 interface AccuracyPoint {
   timeSec: number;
@@ -28,6 +29,9 @@ export default function PostRank({ result }: PostRankProps) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
 
+  const tierInfo = getTierInfo(result.wpm);
+  const imagePath = `/images/tier/${tierInfo.tierImg}.png`;
+
   const handleSubmit = async () => {
     if (!name.trim() || !email.trim()) {
       alert("이름과 이메일을 모두 입력해주세요.");
@@ -38,7 +42,7 @@ export default function PostRank({ result }: PostRankProps) {
       const res = await checkEmailDuplicate(email);
 
       // 이미 존재하면 사용자에게 업데이트 여부를 물어보는 알림창
-      if (res == true) {
+      if (res) {
         const confirmed = confirm(
           "이미 등록된 이메일입니다. 기록을 업데이트하시겠습니까?"
         );
@@ -55,7 +59,7 @@ export default function PostRank({ result }: PostRankProps) {
         wpm: result.wpm,
         error: result.typoCount,
         time: result.durationSec,
-        tier: "스포츠카",
+        tier: tierInfo.tier,
         totalCharacters: result.wpm * result.durationSec,
         accuracy: result.accuracy,
       };
@@ -74,22 +78,22 @@ export default function PostRank({ result }: PostRankProps) {
         <MacOs styleType="type1" />
       </div>
       <div className="pt-[15px] pl-[30px] w-[900px] h-[385px] flex flex-row bg-cdark rounded-br-[5px] rounded-bl-[5px] shadow-lg">
-        <div className="w-[470px]">
+        <div className="w-[470px] relative">
           <div className="text-[35px] font-paper">타수 : {result.wpm}</div>
           <div className="mt-[5px] ml-[5px] text-[20px] font-paper">
-            상위 :{" "}
-            {result.percentile !== null
-              ? `${result.percentile}%`
+            상위 :
+            {result.percentile !== undefined
+              ? ` ${result.percentile.toFixed(2)}%`
               : "로딩 중..."}
           </div>
           <div className="ml-[5px] text-[20px] font-paper">
-            Rank. {/* result.tier */}
+            Rank. {tierInfo.tier}
           </div>
-          <div>
+          <div className="flex justify-center items-center">
             <img
-              src="/images/Logo.png"
-              alt="Logo"
-              className="w-full h-[250px]"
+              src={imagePath}
+              alt={tierInfo.tierImg}
+              className="w-full h-full absolute top-11"
             />
           </div>
         </div>

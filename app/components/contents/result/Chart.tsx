@@ -46,7 +46,7 @@ export default function Chart({ timeline, durationSec }: ChartProps) {
         typeof label === "number" ? label.toFixed(1) : label;
 
       return (
-        <div className="bg-[#333] text-white p-2 rounded text-[14px] space-y-1">
+        <div className="bg-cdark p-2 rounded text-[14px] space-y-1">
           <p>시간: {formattedLabel} 초</p>
           <p>
             <span
@@ -137,7 +137,7 @@ export default function Chart({ timeline, durationSec }: ChartProps) {
       </ResponsiveContainer>
 
       {/* 오른쪽 아래 "타수 / 시간" 레이블 */}
-      <div className="absolute bottom-1 right-2 text-white text-[16px] font-bold">
+      <div className="absolute bottom-1 right-2 text-[16px] font-bold">
         타수 / 시간
       </div>
     </div>

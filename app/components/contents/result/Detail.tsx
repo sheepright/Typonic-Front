@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { getTierInfo } from "../../utils/getTierInfo";
 
 interface Result {
   durationSec: number;
@@ -19,6 +20,8 @@ interface DetailProps {
 export default function Detail({ result }: DetailProps) {
   const router = useRouter();
   const [input, setInput] = useState("");
+
+  const tierInfo = getTierInfo(result.wpm);
 
   const date = new Date(result.savedAt);
   const formattedDate = `${(date.getMonth() + 1)
@@ -45,7 +48,7 @@ export default function Detail({ result }: DetailProps) {
   }, [router]);
 
   return (
-    <div className="w-[900px] h-[340px] bg-[#2C2E31] text-[#FFFFFF] rounded p-4 flex flex-col items-center ">
+    <div className="w-[900px] h-[340px] bg-cdark rounded p-4 flex flex-col items-center ">
       {/* 마우스 커서 깜빡이는거 CSS */}
       <style jsx>{`
         @keyframes blink {
@@ -63,23 +66,22 @@ export default function Detail({ result }: DetailProps) {
           animation: blink 2s step-end infinite;
         }
       `}</style>
-      <h2 className="text-left w-full font-semibold text-[18px] mb-2 tracking-wide font-d2">
+      <h2 className="w-full text-[18px] mb-2 tracking-wide font-d2">
         &gt;_Result
       </h2>
       <div className="w-[880px] h-[1px] bg-white mb-7"></div>
-      <div className="w-full font-normal text-[18px] tracking-wider font-d2">
+      <div className="w-full text-[18px] tracking-wider font-d2">
         <p>last login: {formattedDate}</p>
         <p>typonic@user result % </p>
         <p>typonic@user wpm % {result.wpm}</p>
         <p>typonic@user error % {result.typoCount}</p>
         <p>typonic@user time % {result.durationSec.toFixed(2)}’s</p>
-        <p>typonic@user tier % 스포츠카</p>
+        <p>typonic@user tier % {tierInfo.tier}</p>
         <p>typonic@user totalCharacters % {result.totalChars}</p>
         <p>typonic@user accuracy % {result.accuracy}%</p>
         <p>
           typonic@user % restart (y/n)
-          <span className="blinking-cursor font-salad font-bold"> |</span>{" "}
-          {input}
+          <span className="blinking-cursor font-salad"> |</span> {input}
         </p>
       </div>
     </div>
