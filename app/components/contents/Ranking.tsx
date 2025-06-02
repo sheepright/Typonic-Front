@@ -48,15 +48,13 @@ export default function Ranking() {
   return (
     <div className="w-[940px] h-[579px] rounded-[10px] overflow-hidden shadow-lg font-dung">
       {/* 헤더 */}
-      <div className="flex h-[35px] bg-cdark text-[18px]">
-        <div className="w-[50px] flex items-center justify-center">#</div>
-        <div className="w-[340px] flex items-center pl-1">user.Name</div>
-        <div className="w-[100px] flex items-center justify-center">wpm</div>
-        <div className="w-[100px] flex items-center justify-center">Time</div>
-        <div className="w-[160px] flex items-center justify-center">
-          Accuracy
-        </div>
-        <div className="w-[160px] flex items-center justify-center">Date</div>
+      <div className="flex h-[35px] bg-cdark text-[18px] items-center">
+        <div className="w-[50px] flex justify-center">#</div>
+        <div className="w-[340px] flex pl-1">user.Name</div>
+        <div className="w-[100px] flex justify-center">wpm</div>
+        <div className="w-[100px] flex justify-center">Time</div>
+        <div className="w-[160px] flex justify-center">Accuracy</div>
+        <div className="w-[160px] flex justify-center">Date</div>
       </div>
 
       {/* 스크롤 */}

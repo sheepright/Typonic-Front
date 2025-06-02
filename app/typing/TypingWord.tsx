@@ -36,7 +36,7 @@ const TypingWord: React.FC<TypingWordsDisplayProps> = ({
     currentWordIndex < FIXED_INPUT_INDEX ? currentWordIndex : FIXED_INPUT_INDEX;
 
   return (
-    <div className="w-full flex justify-center mt-6">
+    <div className="w-full flex justify-center mt-[25px]">
       <div className="flex gap-3 px-4 items-center">
         {/* 5. 단어 박스 7개 렌더링 (단어 + 빈 칸) */}
         {[...displayedWords, ...padding].map((word, idx) => {

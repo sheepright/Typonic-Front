@@ -31,7 +31,6 @@ interface Result {
 }
 
 export default function ResultPage() {
-  const [selected, setSelected] = useState<string | null>(null);
   const router = useRouter();
   const [result, setResult] = useState<Result | null>(null);
   const [selectedResult, setSelectedResult] = useState<string>("등급 산정");
@@ -71,19 +70,19 @@ export default function ResultPage() {
     switch (selectedResult) {
       case "등급 산정":
         return (
-          <div className="mt-[50px]">
+          <div className="mt-[125px]">
             <Tier result={result} />
           </div>
         );
       case "상세 정보":
         return (
-          <div className="mt-[50px]">
+          <div className="mt-[90px]">
             <Detail result={result} />
           </div>
         );
       case "그래프":
         return (
-          <div className="mt-[15px]">
+          <div className="mt-[30px]">
             <>
               <MacOs styleType="type1" />
               <div className="w-[900px] shadow-lg bg-cdark p-4">
@@ -104,7 +103,7 @@ export default function ResultPage() {
         );
       case "랭킹 등록":
         return (
-          <div className="mt-[50px]">
+          <div className="mt-[30px]">
             <PostRank result={result} />
           </div>
         );
@@ -116,15 +115,13 @@ export default function ResultPage() {
   return (
     <div className="w-full h-screen flex justify-center items-start">
       <div className="w-full max-w-[1440px] h-full max-h-[1024px] flex flex-col justify-between">
-        <div className="flex flex-col items-center">
-          <Header onClick={() => setSelected(null)} />
+        <div className="flex flex-col items-center flex-grow">
+          <Header />
           <div className="mt-[10px]"></div>
           <ResultMenubar
             selectedResult={selectedResult}
             setSelectedResult={setSelectedResult}
           />
-        </div>
-        <div className="flex justify-center items-center flex-grow">
           {renderContent()}
         </div>
         <Footer />
