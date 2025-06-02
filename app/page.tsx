@@ -112,7 +112,7 @@ const MainContent = ({
 
     case "가이드":
       return (
-        <div className="mt-[200px]">
+        <div className="mt-[100px]">
           <Guide />
         </div>
       );
