@@ -90,6 +90,6 @@ body {
 }
 
 .blinking-cursor {
-  animation: blink 1s step-end infinite;
+  animation: blink 1.5s step-end infinite;
   display: inline-block;
 }
