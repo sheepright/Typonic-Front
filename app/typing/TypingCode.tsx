@@ -22,7 +22,7 @@ const TypingArea: React.FC<TypingAreaProps> = ({ fullText, userInput }) => {
           return (
             <span key={idx} className="text-gray-400 relative inline-block">
               {isCursor && (
-                <span className="blinking-cursor absolute left-0 top-0 w-[1px] h-full bg-white" />
+                <span className="blinking-cursor absolute left-0 top-[6.5px] w-[2px] rounded-full h-[17px] bg-white" />
               )}
               {char}
             </span>
