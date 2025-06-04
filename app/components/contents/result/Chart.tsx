@@ -26,8 +26,12 @@ interface ChartProps {
 export default function Chart({ timeline, durationSec }: ChartProps) {
   if (timeline.length === 0) return null;
 
-  // 0.5초 이후 데이터만 필터링
-  const filteredTimeline = timeline.filter((point) => point.timeSec >= 1);
+  const filteredTimeline = timeline
+    .filter((point) => point.timeSec >= 1)
+    .map((point) => ({
+      ...point,
+      scaledTypoCount: point.typoCount * 3,
+    }));
 
   const CustomTooltip = ({
     active,
@@ -41,7 +45,6 @@ export default function Chart({ timeline, durationSec }: ChartProps) {
     if (active && payload && payload.length > 0) {
       const { wpm, accuracy, typoCount } = payload[0].payload;
 
-      // 시간 값을 소수점 첫째자리까지만 표시
       const formattedLabel =
         typeof label === "number" ? label.toFixed(1) : label;
 
@@ -82,14 +85,12 @@ export default function Chart({ timeline, durationSec }: ChartProps) {
           <XAxis
             dataKey="timeSec"
             tick={false}
-            label={undefined}
             stroke="#ffffff6e"
             strokeWidth={2}
           />
           <YAxis
             yAxisId="left"
             tick={false}
-            label={undefined}
             stroke="#ffffff6e"
             strokeWidth={2}
           />
@@ -99,7 +100,7 @@ export default function Chart({ timeline, durationSec }: ChartProps) {
             verticalAlign="bottom"
             align="left"
             wrapperStyle={{
-              marginLeft: "60px", // 40px만큼 오른쪽으로 이동
+              marginLeft: "60px",
             }}
           />
 
@@ -116,7 +117,7 @@ export default function Chart({ timeline, durationSec }: ChartProps) {
           <Area
             yAxisId="left"
             type="monotone"
-            dataKey="typoCount"
+            dataKey="scaledTypoCount" // 오타 시각화만 3배 스케일
             stroke="#FF9F9F"
             strokeWidth={2}
             fill="#FF9F9F"

@@ -37,7 +37,7 @@ export default function Detail({ result }: DetailProps) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "y" || e.key === "Y") {
-        router.push("/");
+        router.back();
       } else if (e.key === "n" || e.key === "N") {
         setInput("n");
       }
@@ -69,8 +69,8 @@ export default function Detail({ result }: DetailProps) {
       <h2 className="w-full text-[18px] mb-2 tracking-wide font-d2">
         &gt;_Result
       </h2>
-      <div className="w-[880px] h-[1px] bg-white mb-7"></div>
-      <div className="w-full text-[18px] tracking-wider font-d2">
+      <div className="w-[880px] h-[1px] bg-white"></div>
+      <div className="w-full text-[18px] tracking-wider font-d2 mt-5">
         <p>last login: {formattedDate}</p>
         <p>typonic@user result % </p>
         <p>typonic@user wpm % {result.wpm}</p>
