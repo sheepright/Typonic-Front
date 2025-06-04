@@ -21,7 +21,7 @@ export default function InputArea({ setGage, fullText }: InputAreaProps) {
   useEffect(() => {
     setUserInput("");
     setStartTime(null);
-    setAccuracyTimeline([]); // fullText가 바뀔 때도 타임라인 초기화!
+    setAccuracyTimeline([]);
   }, [fullText]);
 
   useEffect(() => {
@@ -36,7 +36,18 @@ export default function InputArea({ setGage, fullText }: InputAreaProps) {
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
 
-    if (value.length === 1 && !startTime) setStartTime(Date.now());
+    if (value.length === 1 && !startTime) {
+      setStartTime(Date.now());
+      // 정확도 100으로 시작
+      setAccuracyTimeline([
+        {
+          timeSec: 0,
+          wpm: 0,
+          accuracy: 100,
+          typoCount: 0,
+        },
+      ]);
+    }
 
     if (value.length < userInput.length) {
       const isAccurate = userInput === fullText.slice(0, userInput.length);
@@ -64,8 +75,10 @@ export default function InputArea({ setGage, fullText }: InputAreaProps) {
           ? Math.round(currentWpmRaw * 5)
           : 0;
 
-        const currentAccuracy = Math.round(
-          (correctChars / fullText.length) * 100
+        // 정확도: 오타 비례로 감소, 100% 시작
+        const currentAccuracy = Math.max(
+          100 - Math.round((typoCount / fullText.length) * 100),
+          0
         );
 
         setAccuracyTimeline((prev) => [
@@ -92,7 +105,11 @@ export default function InputArea({ setGage, fullText }: InputAreaProps) {
       const wpmRaw = (typedWordCount / durationSec) * 60;
       const wpm = isFinite(wpmRaw) ? Math.round(wpmRaw * 5) : 0;
 
-      const accuracy = Math.round((correctChars / fullText.length) * 100);
+      // ✅ 최종 정확도 계산도 오타 기반 감소 방식
+      const accuracy = Math.max(
+        100 - Math.round((typoCount / fullText.length) * 100),
+        0
+      );
 
       localStorage.setItem(
         "typingResult",
