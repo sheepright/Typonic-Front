@@ -38,7 +38,7 @@ export function getTierInfo(wpm: number) {
     return {
       tier: "낚시배",
       tierImg: "class2",
-      speedRange: "천천히 낚시를 즐기며 풍경을 즐기세요.",
+      speedRange: "세월의 글자를 낚는 중이시네요.",
       stars: 2,
     };
   return {

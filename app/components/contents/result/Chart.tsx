@@ -26,7 +26,6 @@ interface ChartProps {
 export default function Chart({ timeline, durationSec }: ChartProps) {
   if (timeline.length === 0) return null;
 
-  // 0.5초 이후 데이터만 필터링 + typoCount만 3배 확장한 scaledTypoCount 추가
   const filteredTimeline = timeline
     .filter((point) => point.timeSec >= 1)
     .map((point) => ({

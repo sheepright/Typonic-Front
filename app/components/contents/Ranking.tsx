@@ -49,12 +49,12 @@ export default function Ranking() {
     <div className="w-[940px] h-[579px] rounded-[10px] overflow-hidden shadow-lg font-dung">
       {/* 헤더 */}
       <div className="flex h-[35px] bg-cdark text-[18px] items-center">
-        <div className="w-[50px] flex justify-center">#</div>
-        <div className="w-[340px] flex pl-1">user.Name</div>
-        <div className="w-[100px] flex justify-center">wpm</div>
-        <div className="w-[100px] flex justify-center">Time</div>
-        <div className="w-[160px] flex justify-center">Accuracy</div>
-        <div className="w-[160px] flex justify-center">Date</div>
+        <div className="w-[50px] flex justify-center text-[23px] pb-1">#</div>
+        <div className="w-[340px] flex pl-1">이름</div>
+        <div className="w-[100px] flex justify-center">타수</div>
+        <div className="w-[100px] flex justify-center">시간</div>
+        <div className="w-[160px] flex justify-center">정확도</div>
+        <div className="w-[160px] flex justify-center">날짜</div>
       </div>
 
       {/* 스크롤 */}

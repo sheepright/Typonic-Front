@@ -37,7 +37,7 @@ export default function Detail({ result }: DetailProps) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "y" || e.key === "Y") {
-        router.push("/");
+        router.back();
       } else if (e.key === "n" || e.key === "N") {
         setInput("n");
       }
