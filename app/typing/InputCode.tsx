@@ -114,6 +114,7 @@ export default function InputArea({ setGage, fullText }: InputAreaProps) {
       localStorage.setItem(
         "typingResult",
         JSON.stringify({
+          classification: 0,
           durationSec,
           wpm,
           accuracy,

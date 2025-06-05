@@ -1,11 +1,15 @@
 "use client";
 
+import { useState } from "react";
+
 interface MenubarProps {
   onSelect: (menu: string) => void;
   selected: string | null;
 }
 
 export default function Menubar({ onSelect, selected }: MenubarProps) {
+  const [hoveredMenu, setHoveredMenu] = useState<string | null>(null);
+
   const menus = [
     "코드 연습",
     "코드 단어 연습",
@@ -28,11 +32,17 @@ export default function Menubar({ onSelect, selected }: MenubarProps) {
             <button
               key={menu}
               onClick={() => onSelect(menu)}
+              onMouseEnter={() => setHoveredMenu(menu)}
+              onMouseLeave={() => setHoveredMenu(null)}
               className={`text-base border-0 bg-transparent font-dung transition-opacity duration-200 text-[white] text-[15px] ${
-                selected === menu ? "opacity-100" : "opacity-20"
-              }`}
+                hoveredMenu === menu || (!hoveredMenu && selected === menu)
+                  ? "opacity-100"
+                  : "opacity-20"
+              } hover:opacity-100`}
               style={
-                selected === menu ? { WebkitTextStroke: "0.2px white" } : {}
+                hoveredMenu === menu || (!hoveredMenu && selected === menu)
+                  ? { WebkitTextStroke: "0.2px white" }
+                  : {}
               }
             >
               {menu}

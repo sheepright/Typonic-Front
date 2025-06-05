@@ -20,6 +20,7 @@ interface AccuracyPoint {
 }
 
 interface Result {
+  classification: number;
   durationSec: number;
   wpm: number;
   accuracy: number;

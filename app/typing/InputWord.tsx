@@ -73,6 +73,7 @@ export default function InputWord({ setGage, words }: TypingWordsInputProps) {
       localStorage.setItem(
         "typingResult",
         JSON.stringify({
+          classification: 1,
           durationSec,
           wpm,
           accuracy: overallAccuracy,
