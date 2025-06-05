@@ -5,6 +5,7 @@ import MacOs from "../../layout/MacOs";
 import InputArea from "@/app/typing/InputCode";
 import Gagebar from "../../layout/Gagebar";
 import { generateFile } from "@/app/api/api";
+import Image from "next/image";
 
 interface FileUploadSectionProps {
   setGage: (value: number) => void;
@@ -45,7 +46,7 @@ export default function FileUploadSection({
 
       setFullText(processedText);
       setIsCompleted(true);
-    } catch (error) {
+    } catch {
       alert("문장 생성 중 오류가 발생했습니다. 다시 시도해 주세요.");
     }
   };
@@ -74,9 +75,11 @@ export default function FileUploadSection({
                   }}
                 >
                   {selectedFileName || "파일을 선택해주세요"}
-                  <img
+                  <Image
                     src="/images/Icon/uploadIcon.png"
                     alt="upload icon"
+                    width={25}
+                    height={25}
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none"
                   />
                 </div>

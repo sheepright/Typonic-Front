@@ -31,7 +31,7 @@ export default function InputArea({ setGage, fullText }: InputAreaProps) {
   useEffect(() => {
     const percent = (userInput.length / fullText.length) * 100;
     setGage(percent);
-  }, [userInput, setGage]);
+  }, [fullText, userInput, setGage]);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;

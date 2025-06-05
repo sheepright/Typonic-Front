@@ -6,6 +6,7 @@ import InputArea from "@/app/typing/InputCode";
 import InputWord from "@/app/typing/InputWord";
 import Gagebar from "../../layout/Gagebar";
 import { generateSentenceKeyword, generateWordKeyword } from "@/app/api/api";
+import Image from "next/image";
 
 export default function Main({
   setGage,
@@ -70,7 +71,7 @@ export default function Main({
       }
 
       setIsCompleted(true);
-    } catch (error) {
+    } catch {
       alert("문장/단어 생성 중 오류가 발생했습니다. 다시 시도해 주세요.");
     }
   };
@@ -134,9 +135,11 @@ export default function Main({
                       }
                     }}
                   />
-                  <img
+                  <Image
                     src="/images/Icon/searchIcon.png"
                     alt="search icon"
+                    width={25}
+                    height={25}
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
                     onClick={handleComplete}
                   />

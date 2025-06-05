@@ -15,8 +15,6 @@ const TypingWord: React.FC<TypingWordsDisplayProps> = ({
   currentWordIndex,
   currentInput,
 }) => {
-  const totalWords = words.length;
-
   let displayedWords: string[] = [];
 
   if (currentWordIndex < FIXED_INPUT_INDEX) {

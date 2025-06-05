@@ -7,8 +7,7 @@ interface CodeProps {
 }
 
 export default function Main({ setGage }: CodeProps) {
-  // ✅ 고정된 fullText 선언
-  const fullText = `#include <studio.h>
+  const fullText = `#include <stdio.h>
 int main() {
 \tprintf("Hello, Typonic!\\n");
 \treturn 0;

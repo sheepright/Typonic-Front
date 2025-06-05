@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
 interface MenubarProps {
   onSelect: (menu: string) => void;
   selected: string | null;

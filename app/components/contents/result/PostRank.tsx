@@ -6,6 +6,7 @@ import { useState } from "react";
 import MacOs from "../../layout/MacOs";
 import { uploadRanking, checkEmailDuplicate } from "@/app/api/api";
 import { getTierInfo } from "../../utils/getTierInfo";
+import Image from "next/image";
 
 interface AccuracyPoint {
   timeSec: number;
@@ -66,8 +67,7 @@ export default function PostRank({ result }: PostRankProps) {
 
       await uploadRanking(postData);
       alert("등록 성공!");
-    } catch (error) {
-      console.error("등록 에러:", error);
+    } catch {
       alert("잠시후 다시 시도해주세요.");
     }
   };
@@ -90,10 +90,12 @@ export default function PostRank({ result }: PostRankProps) {
             Rank. {tierInfo.tier}
           </div>
           <div className="flex justify-center items-center">
-            <img
+            <Image
               src={imagePath}
               alt={tierInfo.tierImg}
-              className="w-full h-full absolute top-11"
+              width={512}
+              height={512}
+              className="absolute top-11"
             />
           </div>
         </div>

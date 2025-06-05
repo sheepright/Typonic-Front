@@ -59,7 +59,7 @@ export default function ResultPage() {
       };
 
       fetchPercentile();
-    } catch (e) {
+    } catch {
       router.replace("/");
     }
   }, [router]);

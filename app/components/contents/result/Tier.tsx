@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { getTierInfo } from "../../utils/getTierInfo";
 
 interface AccuracyPoint {
@@ -34,10 +35,12 @@ export default function Tier({ result }: TierProps) {
       <div className="flex justify-between">
         {/* 왼쪽 이미지 */}
         <div>
-          <img
+          <Image
             src={imagePath}
             alt={tierImg}
-            className="w-[512px] h-[512px] absolute top-10 left-20"
+            width={512}
+            height={512}
+            className="absolute top-10 left-20"
           />
         </div>
 

@@ -3,6 +3,16 @@
 import { useState, useEffect } from "react";
 import { getTop50 } from "@/app/api/api";
 
+// API 원시 데이터 타입
+interface RankingRawItem {
+  name: string;
+  wpm: number;
+  time: number;
+  accuracy: number;
+  date: string; // ISO 형식 날짜
+}
+
+// 화면 표시용 데이터 타입
 interface RankingItem {
   name: string;
   wpm: number;
@@ -17,28 +27,35 @@ export default function Ranking() {
   useEffect(() => {
     const fetchRanking = async () => {
       try {
-        const data = await getTop50();
-        const parsedData = data.map((item: any, i: number) => {
-          // 날짜 데이터 가공
+        const data = (await getTop50()) as unknown as RankingRawItem[];
+
+        const parsedData: RankingItem[] = data.map((item) => {
           const dateObj = new Date(item.date);
-          const month = String(dateObj.getMonth() + 1).padStart(2, "0");
-          const day = String(dateObj.getDate()).padStart(2, "0");
-          const hours = String(dateObj.getHours()).padStart(2, "0");
-          const minutes = String(dateObj.getMinutes()).padStart(2, "0");
-          const formattedDate = `${month}/${day} ${hours}:${minutes}`;
+          const formattedDate = `${(dateObj.getMonth() + 1)
+            .toString()
+            .padStart(2, "0")}/${dateObj
+            .getDate()
+            .toString()
+            .padStart(2, "0")} ${dateObj
+            .getHours()
+            .toString()
+            .padStart(2, "0")}:${dateObj
+            .getMinutes()
+            .toString()
+            .padStart(2, "0")}`;
 
           return {
             name: item.name,
             wpm: item.wpm,
-            time: `${parseFloat(item.time).toFixed(1)}'s`,
+            time: `${Number(item.time).toFixed(1)}'s`,
             accuracy: `${item.accuracy.toFixed(1)} %`,
             date: formattedDate,
           };
         });
 
         setRankingList(parsedData);
-      } catch (err) {
-        console.error("랭킹 데이터 불러오기 실패:", err);
+      } catch {
+        alert("잠시 후 다시 시도해 주세요.");
       }
     };
 
@@ -57,7 +74,7 @@ export default function Ranking() {
         <div className="w-[160px] flex justify-center">날짜</div>
       </div>
 
-      {/* 스크롤 */}
+      {/* 랭킹 리스트 */}
       <div className="overflow-y-auto h-[544px] scrollbar-hide">
         {rankingList.map((item, index) => {
           const rankColor =
