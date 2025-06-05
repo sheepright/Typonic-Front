@@ -5,8 +5,11 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue?logo=typescript&logoColor=white&style=flat)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-blue?logo=tailwindcss&logoColor=white&style=flat)](https://tailwindcss.com/)
 [![Axios](https://img.shields.io/badge/Axios-1.6-blue?logo=axios&logoColor=white&style=flat)](https://axios-http.com/)
+[![GCP](https://img.shields.io/badge/GCP-Google_Cloud-blue?logo=googlecloud&logoColor=white&style=flat)](https://cloud.google.com/)
 
 ### [➡️ GitHub_BackPage](https://github.com/sheepright/Typonic-Back)
+
+### [➡️ TYPONIC Service](https://typonic.co.kr/)
 
 ## ⚓ 프로젝트 소개
 

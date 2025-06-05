@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 interface GageProps {
   gage: number;
 }
@@ -32,10 +34,12 @@ export default function Gagebar({ gage }: GageProps) {
           height: "30px",
         }}
       >
-        <img
+        <Image
           src="/images/GageShip.png"
           alt="GageShip"
-          style={{ width: "100%", height: "100%", objectFit: "contain" }}
+          width={100}
+          height={100}
+          style={{ objectFit: "contain" }}
           className="scale-x-[-1] rotate-[-15deg] transition-all duration-300"
         />
       </div>

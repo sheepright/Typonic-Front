@@ -9,6 +9,7 @@ import {
   Tooltip,
   ResponsiveContainer,
   Legend,
+  TooltipProps,
 } from "recharts";
 
 interface ChartPoint {
@@ -23,7 +24,7 @@ interface ChartProps {
   durationSec: number;
 }
 
-export default function Chart({ timeline, durationSec }: ChartProps) {
+export default function Chart({ timeline }: ChartProps) {
   if (timeline.length === 0) return null;
 
   const filteredTimeline = timeline
@@ -37,11 +38,7 @@ export default function Chart({ timeline, durationSec }: ChartProps) {
     active,
     payload,
     label,
-  }: {
-    active?: boolean;
-    payload?: any;
-    label?: string | number;
-  }) => {
+  }: TooltipProps<number, string>) => {
     if (active && payload && payload.length > 0) {
       const { wpm, accuracy, typoCount } = payload[0].payload;
 

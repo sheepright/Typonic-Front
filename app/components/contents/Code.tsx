@@ -15,7 +15,7 @@ export default function Code({ setGage }: CodeProps) {
   const loadCode = () => {
     const stored = localStorage.getItem("typingCode");
     if (stored) {
-      let decoded = stored.replace(/\\n/g, "\n");
+      const decoded = stored.replace(/\\n/g, "\n");
 
       // 첫, 마지막 줄 제거
       let codeLines = decoded.split("\n");

@@ -5,6 +5,7 @@ import InputArea from "@/app/typing/InputCode";
 import MacOs from "../../layout/MacOs";
 import Gagebar from "../../layout/Gagebar";
 import { generateCopy } from "@/app/api/api";
+import Image from "next/image";
 
 interface CopyProps {
   setGage: (value: number) => void;
@@ -35,7 +36,7 @@ export default function Copy({ setGage, gage }: CopyProps) {
 
         setFullText(processedText);
         setIsCompleted(true);
-      } catch (error) {
+      } catch {
         alert("오류가 발생했습니다. 다시 시도해 주세요.");
       }
     }
@@ -67,9 +68,11 @@ export default function Copy({ setGage, gage }: CopyProps) {
                     }
                   }}
                 />
-                <img
+                <Image
                   src="/images/Icon/clipboardIcon.png"
                   alt="search icon"
+                  width={25}
+                  height={25}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
                   onClick={handleComplete}
                 />
