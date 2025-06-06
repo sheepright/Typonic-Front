@@ -68,18 +68,20 @@ export default function InputArea({ setGage, fullText }: InputAreaProps) {
           .split("")
           .filter((c, i) => c === fullText[i]).length;
         const typoCount = value.length - correctChars;
-
-        const typedWordCount = value.trim().split(/\s+/).filter(Boolean).length;
-        const currentWpmRaw = (typedWordCount / elapsedSec) * 60;
-        const currentWpm = isFinite(currentWpmRaw)
-          ? Math.round(currentWpmRaw * 5)
-          : 0;
-
+        
         // 정확도: 오타 비례로 감소, 100% 시작
         const currentAccuracy = Math.max(
           100 - Math.round((typoCount / fullText.length) * 100),
           0
         );
+
+        const typedWordCount = value.replace(/\s/g, "").length;
+        const currentWpmRaw = (typedWordCount / elapsedSec) * 60;
+        const currentWpm = isFinite(currentWpmRaw)
+                          ? Math.floor(Math.round(currentWpmRaw * 1.5)*currentAccuracy/100)
+                          : 0;
+
+        console.log(typedWordCount);
 
         setAccuracyTimeline((prev) => [
           ...prev,
@@ -101,15 +103,17 @@ export default function InputArea({ setGage, fullText }: InputAreaProps) {
         .filter((c, i) => c === fullText[i]).length;
       const typoCount = value.length - correctChars;
 
-      const typedWordCount = value.trim().split(/\s+/).filter(Boolean).length;
-      const wpmRaw = (typedWordCount / durationSec) * 60;
-      const wpm = isFinite(wpmRaw) ? Math.round(wpmRaw * 5) : 0;
-
       // ✅ 최종 정확도 계산도 오타 기반 감소 방식
       const accuracy = Math.max(
         100 - Math.round((typoCount / fullText.length) * 100),
         0
       );
+
+      const typedWordCount = value.replace(/\s/g, "").length;
+      const wpmRaw = (typedWordCount / durationSec) * 60;
+      const wpm = isFinite(wpmRaw) 
+                  ?Math.floor(Math.round(wpmRaw * 1.5)*accuracy/100)
+                  : 0;
 
       localStorage.setItem(
         "typingResult",

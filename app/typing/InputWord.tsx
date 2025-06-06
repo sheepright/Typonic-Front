@@ -56,7 +56,7 @@ export default function InputWord({ setGage, words }: TypingWordsInputProps) {
     const durationSec = startTime !== null ? (endTime - startTime) / 1000 : 0;
 
     const wpmRaw = (totalLength / durationSec) * 60;
-    const wpm = isFinite(wpmRaw) ? Math.round(wpmRaw * 2) : 0;
+    const wpm = isFinite(wpmRaw) ? Math.floor(Math.round(wpmRaw * 1.5)*overallAccuracy/100) : 0;
 
     const timelineEntry = {
       timeSec: durationSec,
@@ -109,9 +109,6 @@ export default function InputWord({ setGage, words }: TypingWordsInputProps) {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      if (isComposing) {
-        return;
-      }
 
       const currentWord = words[currentWordIndex] || "";
       const finalValue = userInput.slice(0, currentWord.length);
