@@ -5,9 +5,10 @@ import InputArea from "@/app/typing/InputCode";
 
 interface CodeProps {
   setGage: (value: number) => void;
+  tabActive: boolean;
 }
 
-export default function Code({ setGage }: CodeProps) {
+export default function Code({ setGage, tabActive }: CodeProps) {
   const [fullText, setFullText] = useState<string>("로딩 중...");
   const versionRef = useRef<string | null>(null);
 
@@ -52,7 +53,7 @@ export default function Code({ setGage }: CodeProps) {
 
   return (
     <div className="w-[900px] h-auto bg-cdark rounded-br-[5px] rounded-bl-[5px] pb-[10px] shadow-lg ">
-      <InputArea setGage={setGage} fullText={fullText} />
+      <InputArea setGage={setGage} fullText={fullText} clicked={tabActive} />
     </div>
   );
 }

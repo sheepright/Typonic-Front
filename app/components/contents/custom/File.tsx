@@ -96,7 +96,7 @@ export default function FileUploadSection({
             <MacOs styleType="type1" />
           </div>
           <div className="w-[900px] h-auto bg-cdark rounded-br-[5px] rounded-bl-[5px] pb-[10px] shadow-lg">
-            <InputArea setGage={setGage} fullText={fullText} />
+            <InputArea setGage={setGage} fullText={fullText} clicked />
           </div>
         </>
       )}

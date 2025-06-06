@@ -21,12 +21,6 @@ export interface RankingRequest {
   accuracy: number;
 }
 
-export interface TopUser {
-  name: string;
-  wpm: number;
-  accuracy: number;
-}
-
 export interface WordGenerationRequest {
   language: string;
   count: number;
@@ -49,9 +43,15 @@ export const uploadRanking = async (data: RankingRequest): Promise<void> => {
   await api.post("/db/ranking", data);
 };
 
-// 상위 50명 랭킹 조회
-export const getTop50 = async (): Promise<string[]> => {
-  const res = await api.get("/db/top50");
+// 상위 50명 문장 랭킹 조회
+export const getTop50Sentence = async (): Promise<string[]> => {
+  const res = await api.get("/db/top50/sentence");
+  return res.data;
+};
+
+// 상위 50명 단어 랭킹 조회
+export const getTop50Word = async (): Promise<string[]> => {
+  const res = await api.get("/db/top50/word");
   return res.data;
 };
 
