@@ -62,8 +62,16 @@ export const getPercentile = async (wpm: number): Promise<number> => {
 };
 
 // 이메일 중복 확인
-export const checkEmailDuplicate = async (email: string): Promise<boolean> => {
-  const res = await api.get("/db/email", { params: { email } });
+export const checkEmailDuplicate = async (
+  email: string,
+  classification: number
+): Promise<boolean> => {
+  const res = await api.get("/db/email", {
+    params: {
+      email,
+      classification,
+    },
+  });
   return res.data;
 };
 

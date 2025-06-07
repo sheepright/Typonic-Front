@@ -16,7 +16,6 @@ export default function InputWord({ setGage, words }: TypingWordsInputProps) {
   const [accuracyTimeline, setAccuracyTimeline] = useState<
     { timeSec: number; wpm: number; accuracy: number; typoCount: number }[]
   >([]);
-  const [isComposing, setIsComposing] = useState(false);
   const [totalTypos, setTotalTypos] = useState(0);
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -113,7 +112,7 @@ export default function InputWord({ setGage, words }: TypingWordsInputProps) {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     const now = Date.now();
-    if (e.key === "Enter" && !isComposing) {
+    if (e.key === "Enter" && e.nativeEvent.isComposing === false) {
       e.preventDefault();
 
       if (now - lastEnterTimeRef.current < 100) {
@@ -131,7 +130,6 @@ export default function InputWord({ setGage, words }: TypingWordsInputProps) {
   const handleCompositionEnd = (
     e: React.CompositionEvent<HTMLTextAreaElement>
   ) => {
-    setIsComposing(false);
     const value = e.currentTarget.value;
     const currentWord = words[currentWordIndex] || "";
     const finalValue = value.slice(0, currentWord.length);
@@ -163,7 +161,6 @@ export default function InputWord({ setGage, words }: TypingWordsInputProps) {
         value={userInput}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
-        onCompositionStart={() => setIsComposing(true)}
         onCompositionEnd={handleCompositionEnd}
         className="absolute inset-0 w-full h-full opacity-0 resize-none"
         autoFocus

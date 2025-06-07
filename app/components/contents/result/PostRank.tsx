@@ -42,7 +42,7 @@ export default function PostRank({ result }: PostRankProps) {
     }
 
     try {
-      const res = await checkEmailDuplicate(email);
+      const res = await checkEmailDuplicate(email, result.classification);
 
       // 이미 존재하면 사용자에게 업데이트 여부를 물어보는 알림창
       if (res) {
@@ -84,6 +84,9 @@ export default function PostRank({ result }: PostRankProps) {
             alert(message);
             break;
           case 1003:
+            alert(message);
+            break;
+          case 1004:
             alert(message);
             break;
           default:
