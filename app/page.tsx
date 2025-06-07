@@ -13,30 +13,38 @@ import Menubar from "./components/menubars/Main";
 import CodeMenubar from "./components/menubars/Code";
 import WordMenubar from "./components/menubars/Word";
 import CustomMenubar from "./components/menubars/Custom";
+import RankingMenubar from "./components/menubars/Ranking";
 
 // Contents Component
 import MainCode from "./components/contents/Main";
 import Code from "./components/contents/Code";
 import Word from "./components/contents/Word";
 import Guide from "./components/contents/Guide";
-import Raking from "./components/contents/Ranking";
 
 //Custom Component
 import Custom from "./components/contents/custom/Main";
 import Copy from "./components/contents/custom/Copy";
 import File from "./components/contents/custom/File";
 
+//Ranking Component
+import RankingSentence from "./components/contents/ranking/RankingSentence";
+import RankingWord from "./components/contents/ranking/RankingWord";
+
 // 동적 메뉴바
 const DynamicMenubar = ({
   selected,
   onSelect,
   customMode,
+  rankingMode,
   setCustomMode,
+  setRankingMode,
 }: {
   selected: string | null;
   onSelect: (key: string) => void;
   customMode: string;
+  rankingMode: string;
   setCustomMode: (val: string) => void;
+  setRankingMode: (val: string) => void;
 }) => {
   const menuComponentMap: Record<string, JSX.Element> = {
     "코드 연습": <CodeMenubar />,
@@ -45,6 +53,12 @@ const DynamicMenubar = ({
       <CustomMenubar
         selectedMode={customMode}
         setSelectedMode={setCustomMode}
+      />
+    ),
+    "전체 랭킹": (
+      <RankingMenubar
+        selectedMode={rankingMode}
+        setSelectedMode={setRankingMode}
       />
     ),
   };
@@ -61,13 +75,21 @@ const MainContent = ({
   selected,
   gage,
   setGage,
+  rankingMode,
   customMode,
 }: {
   selected: string | null;
   gage: number;
   setGage: (val: number) => void;
   customMode: string;
+  rankingMode: string;
 }) => {
+  const [tabActive, setTabActive] = useState(true);
+
+  const handleToggle = () => {
+    setTabActive((prev) => !prev);
+  };
+
   switch (selected) {
     case "코드 연습":
       return (
@@ -76,9 +98,14 @@ const MainContent = ({
             <Gagebar gage={gage} />
           </div>
           <div className="mt-[15px]">
-            <MacOs styleType="type1" />
+            <MacOs
+              styleType="type1"
+              codeType={true}
+              tabActive={tabActive}
+              onToggle={handleToggle}
+            />
           </div>
-          <Code setGage={setGage} />
+          <Code setGage={setGage} tabActive={tabActive} />
         </>
       );
 
@@ -106,7 +133,8 @@ const MainContent = ({
     case "전체 랭킹":
       return (
         <div className="mt-[50px]">
-          <Raking />
+          {rankingMode === "문장 랭킹" && <RankingSentence />}
+          {rankingMode === "단어 랭킹" && <RankingWord />}
         </div>
       );
 
@@ -124,9 +152,14 @@ const MainContent = ({
             <Gagebar gage={gage} />
           </div>
           <div className="mt-[15px]">
-            <MacOs styleType="type1" />
+            <MacOs
+              styleType="type1"
+              codeType={true}
+              tabActive={tabActive}
+              onToggle={handleToggle}
+            />
           </div>
-          <MainCode setGage={setGage} />
+          <MainCode setGage={setGage} tabActive={tabActive} />
         </>
       );
   }
@@ -137,6 +170,7 @@ export default function Main() {
   const [selected, setSelected] = useState<string | null>(null);
   const [gage, setGage] = useState(0);
   const [customMode, setCustomMode] = useState<string>("키워드");
+  const [rankingMode, setRankingMode] = useState<string>("문장 랭킹");
 
   return (
     <div className="w-full h-screen flex justify-center">
@@ -148,7 +182,9 @@ export default function Main() {
               selected={selected}
               onSelect={setSelected}
               customMode={customMode}
+              rankingMode={rankingMode}
               setCustomMode={setCustomMode}
+              setRankingMode={setRankingMode}
             />
           </div>
           <MainContent
@@ -156,6 +192,7 @@ export default function Main() {
             gage={gage}
             setGage={setGage}
             customMode={customMode}
+            rankingMode={rankingMode}
           />
         </div>
         <Footer />

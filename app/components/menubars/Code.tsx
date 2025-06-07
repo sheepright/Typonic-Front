@@ -9,6 +9,9 @@ export default function CodeMenubar() {
     "Short" | "Middle" | "Long"
   >("Short");
 
+  const [hoveredLanguage, setHoveredLanguage] = useState<string | null>(null);
+  const [hoveredLength, setHoveredLength] = useState<string | null>(null);
+
   const menu = [
     "코드 연습",
     "Line",
@@ -30,7 +33,9 @@ export default function CodeMenubar() {
 
     const fetch = async () => {
       try {
-        alert("잠시만 기다려주세요, 최대 1분까지 소요될 수 있습니다.");
+        alert(
+          "잠시만 기다려주세요, 최대 1분까지 소요될 수 있습니다.\n문장이 변경된 후 진행하여주세요."
+        );
         const res = await generateCodeExample({
           language: selectedLanguage,
           length: selectedLength.toLowerCase() as "short" | "middle" | "long",
@@ -58,7 +63,6 @@ export default function CodeMenubar() {
             );
           }
 
-          const alwaysSelected = item === "코드 연습";
           const isLanguage = [
             "C++",
             "C#",
@@ -68,12 +72,24 @@ export default function CodeMenubar() {
             "JavaScript",
             "TypeScript",
           ].includes(item);
+
           const isLength = ["Short", "Middle", "Long"].includes(item);
 
-          const isSelected =
-            alwaysSelected ||
-            (isLanguage && selectedLanguage === item) ||
-            (isLength && selectedLength === item);
+          const isCodeLabel = item === "코드 연습";
+          const isSelectedLanguage = selectedLanguage === item;
+          const isSelectedLength = selectedLength === item;
+
+          let isActive = false;
+          if (isCodeLabel) {
+            isActive = true;
+          } else if (isLanguage) {
+            isActive =
+              hoveredLanguage === item ||
+              (!hoveredLanguage && isSelectedLanguage);
+          } else if (isLength) {
+            isActive =
+              hoveredLength === item || (!hoveredLength && isSelectedLength);
+          }
 
           const handleClick = () => {
             if (isLanguage) {
@@ -83,14 +99,29 @@ export default function CodeMenubar() {
             }
           };
 
+          const commonProps = isCodeLabel
+            ? {}
+            : isLanguage
+            ? {
+                onMouseEnter: () => setHoveredLanguage(item),
+                onMouseLeave: () => setHoveredLanguage(null),
+              }
+            : isLength
+            ? {
+                onMouseEnter: () => setHoveredLength(item),
+                onMouseLeave: () => setHoveredLength(null),
+              }
+            : {};
+
           return (
             <button
               key={item}
               onClick={handleClick}
+              {...commonProps}
               className={`text-base border-0 bg-transparent font-dung transition-opacity duration-200 text-white text-[15px] ${
-                isSelected ? "opacity-100" : "opacity-20"
+                isActive ? "opacity-100" : "opacity-20"
               }`}
-              style={isSelected ? { WebkitTextStroke: "0.2px white" } : {}}
+              style={isActive ? { WebkitTextStroke: "0.2px white" } : {}}
             >
               {item}
             </button>

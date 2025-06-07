@@ -4,9 +4,10 @@ import InputArea from "@/app/typing/InputCode";
 
 interface CodeProps {
   setGage: (value: number) => void;
+  tabActive: boolean;
 }
 
-export default function Main({ setGage }: CodeProps) {
+export default function Main({ setGage, tabActive }: CodeProps) {
   const fullText = `#include <stdio.h>
 int main() {
 \tprintf("Hello, Typonic!\\n");
@@ -16,7 +17,7 @@ int main() {
   return (
     <div className="w-[900px] h-auto bg-cdark rounded-br-[5px] rounded-bl-[5px] pb-[10px] shadow-lg">
       {/* fullText를 고정된 값으로 넘김 */}
-      <InputArea setGage={setGage} fullText={fullText} />
+      <InputArea setGage={setGage} fullText={fullText} clicked={tabActive} />
     </div>
   );
 }

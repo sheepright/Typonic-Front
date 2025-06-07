@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getTop50 } from "@/app/api/api";
+import { getTop50Sentence } from "@/app/api/api";
 
 // API 원시 데이터 타입
 interface RankingRawItem {
@@ -27,7 +27,7 @@ export default function Ranking() {
   useEffect(() => {
     const fetchRanking = async () => {
       try {
-        const data = (await getTop50()) as unknown as RankingRawItem[];
+        const data = (await getTop50Sentence()) as unknown as RankingRawItem[];
 
         const parsedData: RankingItem[] = data.map((item) => {
           const dateObj = new Date(item.date);

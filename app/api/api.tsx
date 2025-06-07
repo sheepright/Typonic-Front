@@ -19,12 +19,7 @@ export interface RankingRequest {
   tier: string;
   totalCharacters: number;
   accuracy: number;
-}
-
-export interface TopUser {
-  name: string;
-  wpm: number;
-  accuracy: number;
+  classification: number;
 }
 
 export interface WordGenerationRequest {
@@ -49,9 +44,15 @@ export const uploadRanking = async (data: RankingRequest): Promise<void> => {
   await api.post("/db/ranking", data);
 };
 
-// 상위 50명 랭킹 조회
-export const getTop50 = async (): Promise<string[]> => {
-  const res = await api.get("/db/top50");
+// 상위 50명 문장 랭킹 조회
+export const getTop50Sentence = async (): Promise<string[]> => {
+  const res = await api.get("/db/top50/sentence");
+  return res.data;
+};
+
+// 상위 50명 단어 랭킹 조회
+export const getTop50Word = async (): Promise<string[]> => {
+  const res = await api.get("/db/top50/word");
   return res.data;
 };
 
@@ -62,8 +63,16 @@ export const getPercentile = async (wpm: number): Promise<number> => {
 };
 
 // 이메일 중복 확인
-export const checkEmailDuplicate = async (email: string): Promise<boolean> => {
-  const res = await api.get("/db/email", { params: { email } });
+export const checkEmailDuplicate = async (
+  email: string,
+  classification: number
+): Promise<boolean> => {
+  const res = await api.get("/db/email", {
+    params: {
+      email,
+      classification,
+    },
+  });
   return res.data;
 };
 

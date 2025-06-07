@@ -5,6 +5,7 @@
 import { useState } from "react";
 import MacOs from "../../layout/MacOs";
 import { uploadRanking, checkEmailDuplicate } from "@/app/api/api";
+import { AxiosError } from "axios";
 import { getTierInfo } from "../../utils/getTierInfo";
 import Image from "next/image";
 
@@ -16,6 +17,7 @@ interface AccuracyPoint {
 
 interface PostRankProps {
   result: {
+    classification: number;
     durationSec: number;
     wpm: number;
     accuracy: number;
@@ -40,7 +42,7 @@ export default function PostRank({ result }: PostRankProps) {
     }
 
     try {
-      const res = await checkEmailDuplicate(email);
+      const res = await checkEmailDuplicate(email, result.classification);
 
       // 이미 존재하면 사용자에게 업데이트 여부를 물어보는 알림창
       if (res) {
@@ -63,12 +65,39 @@ export default function PostRank({ result }: PostRankProps) {
         tier: tierInfo.tier,
         totalCharacters: result.wpm * result.durationSec,
         accuracy: result.accuracy,
+        classification: result.classification,
       };
 
       await uploadRanking(postData);
       alert("등록 성공!");
-    } catch {
-      alert("잠시후 다시 시도해주세요.");
+    } catch (err: unknown) {
+      const error = err as AxiosError<{ code: number; message: string }>;
+
+      if (error.response?.status === 400) {
+        const { code, message } = error.response.data;
+
+        switch (code) {
+          case 1001:
+            alert(message);
+            break;
+          case 1002:
+            alert(message);
+            break;
+          case 1003:
+            alert(message);
+            break;
+          case 1004:
+            alert(message);
+            break;
+          case 1005:
+            alert(message);
+            break;
+          default:
+            alert("잠시 후에 다시 시도하여 주세요.");
+        }
+      } else {
+        alert("잠시 후에 다시 시도하여 주세요.");
+      }
     }
   };
 

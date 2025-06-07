@@ -2,16 +2,16 @@
 
 import { useState } from "react";
 
-interface CustomMenubarProps {
+interface RankingMenubarProps {
   selectedMode: string;
   setSelectedMode: (mode: string) => void;
 }
 
-export default function CustomMenubar({
+export default function RankingMenubar({
   selectedMode,
   setSelectedMode,
-}: CustomMenubarProps) {
-  const menu = ["커스텀 연습", "Line", "키워드", "복.붙", "파일 첨부"];
+}: RankingMenubarProps) {
+  const menu = ["전체 랭킹", "Line", "문장 랭킹", "단어 랭킹"];
   const [hoveredMode, setHoveredMode] = useState<string | null>(null);
 
   return (
@@ -27,8 +27,8 @@ export default function CustomMenubar({
             );
           }
 
-          const alwaysSelected = item === "커스텀 연습";
-          const isMode = ["키워드", "복.붙", "파일 첨부"].includes(item);
+          const alwaysSelected = item === "전체 랭킹";
+          const isMode = ["문장 랭킹", "단어 랭킹"].includes(item);
           const isActuallySelected = isMode && selectedMode === item;
 
           const isActive =

@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 interface ResultMenuProps {
   selectedResult: string;
   setSelectedResult: (item: string) => void;
@@ -9,6 +11,8 @@ export default function ResultMenubar({
   selectedResult,
   setSelectedResult,
 }: ResultMenuProps) {
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+
   const menu = [
     "결과", // 항상 선택된 라벨
     "Line",
@@ -33,7 +37,12 @@ export default function ResultMenubar({
 
           const isAlwaysSelected = item === "결과";
           const isClickable = !isAlwaysSelected;
-          const isSelected = isAlwaysSelected || selectedResult === item;
+          const isActuallySelected = selectedResult === item;
+
+          const isActive =
+            isAlwaysSelected ||
+            hoveredItem === item ||
+            (!hoveredItem && isActuallySelected);
 
           const handleClick = () => {
             if (isClickable) {
@@ -41,14 +50,22 @@ export default function ResultMenubar({
             }
           };
 
+          const hoverEvents = isClickable
+            ? {
+                onMouseEnter: () => setHoveredItem(item),
+                onMouseLeave: () => setHoveredItem(null),
+              }
+            : {};
+
           return (
             <button
               key={`menu-${item}`}
               onClick={handleClick}
+              {...hoverEvents}
               className={`text-base border-0 bg-transparent font-dung transition-opacity duration-200 text-[white] text-[15px] ${
-                isSelected ? "opacity-100" : "opacity-20"
+                isActive ? "opacity-100" : "opacity-20"
               } ${isAlwaysSelected ? "cursor-default" : "cursor-pointer"}`}
-              style={isSelected ? { WebkitTextStroke: "0.2px white" } : {}}
+              style={isActive ? { WebkitTextStroke: "0.2px white" } : {}}
               disabled={!isClickable}
             >
               {item}

@@ -51,8 +51,15 @@ export default function Tier({ result }: TierProps) {
           </p>
           <p className="text-[25px]">{speedRange}</p>
           <div className="flex">
-            {Array.from({ length: stars }).map((_, i) => (
-              <span key={i} className="text-yellow-400 text-[25px]">
+            {Array.from({ length: 7 }).map((_, i) => (
+              <span
+                key={i}
+                className={`text-[25px] ${
+                  i < stars
+                    ? "text-yellow-400"
+                    : "text-black dark:text-white opacity-30"
+                }`}
+              >
                 ★
               </span>
             ))}
