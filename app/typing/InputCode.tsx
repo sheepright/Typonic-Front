@@ -104,8 +104,6 @@ export default function InputArea({
             )
           : 0;
 
-        console.log(typedWordCount);
-
         setAccuracyTimeline((prev) => [
           ...prev,
           {

@@ -19,6 +19,7 @@ export interface RankingRequest {
   tier: string;
   totalCharacters: number;
   accuracy: number;
+  classification: number;
 }
 
 export interface WordGenerationRequest {

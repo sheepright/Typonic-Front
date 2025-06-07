@@ -89,6 +89,9 @@ export default function PostRank({ result }: PostRankProps) {
           case 1004:
             alert(message);
             break;
+          case 1005:
+            alert(message);
+            break;
           default:
             alert("잠시 후에 다시 시도하여 주세요.");
         }

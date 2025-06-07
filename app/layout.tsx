@@ -19,12 +19,31 @@ const description = "대학생 개발자들이 모여서 만든 AI를 활용한 
 export async function generateMetadata(): Promise<Metadata> {
   return {
     applicationName: name,
-    title: name,
+    title: {
+      default: title,
+      template: "%s | TYPONIC",
+    },
     description: description,
 
     icons: {
       icon: "/favicon.ico",
     },
+
+    keywords: [
+      "TYPONIC",
+      "타이포닉",
+      "타자연습",
+      "개발자 타자연습",
+      "타이핑",
+      "타이핑 연습",
+      "typing",
+      "typingtest",
+      "코딩",
+      "코딩 타자연습",
+      "coding",
+      "code typing",
+      "AI 타자연습",
+    ],
 
     openGraph: {
       type: "website",
